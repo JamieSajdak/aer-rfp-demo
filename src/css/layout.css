@@ -1,0 +1,20 @@
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    padding-bottom: 4rem;
+}
+
+.container--inner {
+    max-width: 900px;
+    margin: auto;
+    min-height: 60vh;
+}
+
+.flow > * {
+    margin-top: 2rem;
+}
+
+.space > * + * {
+    margin-left: 1rem;
+}
