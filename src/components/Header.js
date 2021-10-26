@@ -45,7 +45,7 @@ const Header = () => {
                     padding: 1rem 0;
                 }
                 .header-logo {
-                    height:100%;
+                    height:4.5rem;
                 }
                 .nav {
                     align-items:end;
