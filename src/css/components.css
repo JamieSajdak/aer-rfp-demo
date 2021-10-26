@@ -41,14 +41,18 @@
 .button {
     padding: 0.8rem 2.5rem;
     border-radius: 10000px;
-    border-style: solid;
-    border-width: 3px;
+    border: 2px solid var(--fg);
+    color: var(--bg);
     text-align: center;
     cursor: pointer;
     filter: drop-shadow(4px 4px 4px rgba(0,0,0,0.2));
     font-weight: 600;
     transition: all 0.2s;
     min-width: 10rem;
+}
+.button:hover {
+    background-color: var(--fg);
+    color: var(--bg);
 }
 
 .button--submit {
@@ -124,7 +128,7 @@ thead {
     padding: 0;
     margin-left: 0.5rem;
     border-radius: 50%;
-    background-image: url('../components/downarrow.svg');
+    background-image: url('./downarrow.svg');
     background-size: 70%;
     background-repeat: no-repeat;
     background-position: center;

@@ -2,7 +2,6 @@
     width: 90%;
     max-width: 1000px;
     margin: auto;
-    padding-bottom: 4rem;
 }
 
 .container--inner {
@@ -11,10 +10,16 @@
     min-height: 60vh;
 }
 
-.flow > * {
+.flow > * + * {
     margin-top: 2rem;
 }
+.flow:first-child {
+    margin-top: 3rem;
+}
 
+.space {
+    display: flex;
+}
 .space > * + * {
     margin-left: 1rem;
 }

@@ -19,11 +19,13 @@
   filter: var(--ut-shadow)
 }
 
-.bg-primary {
-  background-color: var(--cl-primary);
+.bg--primary {
+  --fg: var(--cl-primary);
+  --bg:white;
 }
-.bg-secondary {
-  background-color: var(--cl-light-green);
+.bg--submitted {
+  --fg: var(--cl-light-green);
+  --bg:white;
 }
 
 .App {

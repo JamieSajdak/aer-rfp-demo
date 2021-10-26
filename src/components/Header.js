@@ -9,11 +9,11 @@ const Header = () => {
     return (
         <Aux>
              <div className="header">
-                <div className="header-container container">
+                <div className="container space">
                     <img src={"/images/AER_Logo.png"} alt="Alberta Energy Regulator" className="header-logo"/>
                     <div className="nav-container">
                         <img src={"/images/logo-onestop.png"} alt="one stop" className="onestop"/>
-                        <nav className="nav">
+                        <nav className="space nav">
                             <NavLink
                                 to="/"
                                 exact
@@ -30,7 +30,7 @@ const Header = () => {
                             >
                                 Submit Record
                             </NavLink>
-                            <button className="nav-link logout-button logout button" onClick={() =>setUserContext({})}>
+                            <button className="nav-link logout button bg--primary" onClick={() =>setUserContext({})}>
                                 <img src={"/images/user_icon.svg"} className="logout-icon" alt="logout"/>
                                 Logout
                             </button>
@@ -42,22 +42,13 @@ const Header = () => {
                 .header {
                     background-color: white;
                     margin-bottom: 1rem;
-                }
-                .header-container {
                     padding: 1rem 0;
-                    display: flex;
-                    flex-direction: row;
                 }
                 .header-logo {
                     height:100%;
                 }
                 .nav {
-                    display: flex;
-                    flex-direction: row;
                     align-items:end;
-                }
-                .nav > * + * {
-                    margin-left: 1rem;
                 }
                 .nav-link {
                     text-decoration: none;
@@ -81,22 +72,15 @@ const Header = () => {
                     max-width: 8rem;
                     width: 20vw;
                 }
-                .logout {
-                    display: flex;
-                    flex-direction:row;
-                }
                 .logout-icon {
                     width:2rem;
                     height:1.2rem;
                     opacity: 0.5;
                 }
-                .logout-button {
+                .logout {
                     margin-top: 0.5rem;
-                    background: none;
                     min-width:auto;
                     padding: 0.3rem 0.7rem 0.3rem 0.1rem;
-                    border: 1px solid #ccc;
-                    cursor:pointer;
                     display: flex;
                     align-items: center;
                 }
