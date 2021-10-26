@@ -149,6 +149,7 @@ const Review = (props) => {
                     width: 100%;
                     max-width: 35rem;
                     background-color: white;
+                    margin-right:auto;
                 }
                 .selected-project h2 {
                     padding: 0.5rem 1rem;
@@ -156,6 +157,7 @@ const Review = (props) => {
                     color: white;
                 }
                 .selected-project-details {
+                    text-transform: capitalize;
                     padding: 1rem;
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
