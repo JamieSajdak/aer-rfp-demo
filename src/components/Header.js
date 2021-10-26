@@ -83,7 +83,7 @@ const Header = () => {
                     padding: 0.3rem 0.7rem 0.3rem 0.1rem;
                     display: flex;
                     align-items: center;
-                    font-size: 1rem;
+                    font-size: 0.8rem;
                 }
             `}</style>
         </Aux>
