@@ -8,9 +8,9 @@ const InputFile = (props) => {
     return (
         <Aux>
             <div className="input">
-                <lable className="input-lable" for={props.for}>
-                        {props.lable ||props.for}
-                </lable>
+                <label className="input-label" for={props.for}>
+                        {props.label ||props.for}
+                </label>
                 <InputFiles onChange={props.change}>
                     <button className="input-field button bg--primary select">Select a File</button>
                 </InputFiles>

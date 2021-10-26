@@ -8,11 +8,11 @@ const InputDate = (props) => {
     return (
         <Aux>
             <div className="input">
-                <lable className="input-lable" for={props.for}>
-                        {props.lable ||props.for}
+                <label className="input-label" for={props.for}>
+                        {props.label ||props.for}
                         <span aria-hidden="true">{' * '}</span>
                         <span aria-live="polite"  className="input-error">{props.errors[props.for]}</span>
-                </lable>
+                </label>
                 <DatePicker
                     className="input-field date"
                     onChange={props.change}

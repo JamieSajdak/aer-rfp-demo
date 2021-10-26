@@ -5,11 +5,11 @@ const SelectField = (props) => {
     return (
         <Aux>
             <div className="input">
-                <lable className="input-lable">
-                        {props.lable ||props.for}
+                <label className="input-label">
+                        {props.label ||props.for}
                         <span aria-hidden="true">{' * '}</span>
                         <span aria-live="polite"  className="input-error">{props.errors[props.for]}</span>
-                </lable>
+                </label>
 
                     <select 
                         id={props.for}

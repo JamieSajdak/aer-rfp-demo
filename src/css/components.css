@@ -7,7 +7,7 @@
     position: relative;
 }
 
-.input-lable {
+.input-label {
     margin-bottom: 0.2rem;
     color: var(--font-primary-color);
     text-transform: capitalize;

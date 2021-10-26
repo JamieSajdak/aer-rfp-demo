@@ -48,7 +48,7 @@ const Submit = (props) => {
                     <form className="form" id="record-submission" onSubmit={handleSubmit}>
                         <SelectField
                             for="authorization_num"
-                            lable="Authorization Number"
+                            label="Authorization Number"
                             errors={errors}
                             input={input}
                             change={handleChange}
@@ -57,7 +57,7 @@ const Submit = (props) => {
                         />
                         <InputTextField 
                             for="well_id"
-                            lable="Well ID"
+                            label="Well ID"
                             errors={errors}
                             input={input}
                             type="text"
@@ -66,7 +66,7 @@ const Submit = (props) => {
                         />
                         <InputDate
                             for="date"
-                            lable="Submitted Date"
+                            label="Submitted Date"
                             errors={errors}
                             input={input}
                             type="text"
@@ -74,7 +74,7 @@ const Submit = (props) => {
                         />
                         <InputTextField 
                             for="industry_name"
-                            lable="Industry Name"
+                            label="Industry Name"
                             errors={errors}
                             input={input}
                             type="text"
@@ -83,7 +83,7 @@ const Submit = (props) => {
                         />
                         <InputTextField
                             for="industry_type"
-                            lable="Industry Type"
+                            label="Industry Type"
                             errors={errors}
                             input={input}
                             change={handleChange}
@@ -99,14 +99,14 @@ const Submit = (props) => {
                         />
                         <InputFile 
                             for="auto"
-                            lable="Auto Populate"
+                            label="Auto Populate"
                             input={input}
                             type="file"
                             change={file => handleAutoPopulate(file)}
                         />
                         <InputFile 
                             for="file"
-                            lable="Supported Documentation"
+                            label="Supported Documentation"
                             errors={errors}
                             input={input}
                             type="file"
