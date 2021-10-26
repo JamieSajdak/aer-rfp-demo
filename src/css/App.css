@@ -19,16 +19,26 @@
   filter: var(--ut-shadow)
 }
 
-.bg-primary {
-  background-color: var(--cl-primary);
+.bg--primary {
+  --fg: var(--cl-primary);
+  --bg:white;
 }
-.bg-secondary {
-  background-color: var(--cl-light-green);
+.bg--submitted {
+  --fg: var(--cl-light-green);
+  --bg:white;
+}
+.bg--secondary {
+  --fg: var(--cl-light-green);
+  --bg: white;
+}
+.bg--danger {
+  --fg: var(--cl-danger);
+  --bg: white;
 }
 
 .App {
   margin: 0;
-  padding: 0;
+  padding: 0 0 4rem 0;
   position: relative;
   background-image: url('./AER_Background.svg');
   background-size: 60%;

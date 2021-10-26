@@ -28,37 +28,51 @@ const Layout = (props) => {
 
     return (
         <div>
-            <div className="login-background">
+            <div className="background">
             </div>
             <div className="login-panel">
-                <form className="login-container" onSubmit={handleSubmit}> 
+                    
+                <form className="login-container flow flow--between" onSubmit={handleSubmit}> 
                     <img src={images + "login.jpg"} className="login-image" alt="login"/>
                     <h1 className="login-title title">User Login</h1>
-                    <InputTextField 
-                        placeholder="Enter Username" 
-                        for="username" 
-                        icon={images + "user_black.png"} 
-                        type="text" 
-                        input={input}
-                        change={handleChange}
-                        errors={errors}
-                    />
-                    <InputTextField 
-                        placeholder="Enter Password" 
-                        for="password" 
-                        icon={images + "lock_black.png"} 
-                        type="password"
-                        input={input}
-                        change={handleChange}
-                        errors={errors}/>
-                    <button className="button button--submit" >Submit</button>
+                    <div className="inputs flow--gap">
+                        <InputTextField 
+                                placeholder="Enter Username" 
+                                for="username" 
+                                icon={images + "user_black.png"} 
+                                type="text" 
+                                input={input}
+                                change={handleChange}
+                                errors={errors}
+                            />
+                        <InputTextField 
+                            placeholder="Enter Password" 
+                            for="password" 
+                            icon={images + "lock_black.png"} 
+                            type="password"
+                            input={input}
+                            change={handleChange}
+                            errors={errors}/>
+                    </div>
+                    <button className="button button--submit bg--secondary" >Submit</button>
                 </form>
             </div>
             <style jsx>{`
+            .background {
+                z-index: 10;
+                height: 100vh;
+                background: radial-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                cursor:not-allowed;
+            }
             .login-panel {
                 z-index: 20;
                 width: 90%;
-                height: 80%;
+                height: 90vh;
                 max-width: 400px;
                 max-height: 600px;
                 background-color: white;
@@ -70,38 +84,20 @@ const Layout = (props) => {
               }
             .login-container {
                 width: 70%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
                 margin: auto;
-                padding:2rem 0;
+                height: 80%;
             }
             .login-container > * {
                 margin-left: auto;
                 margin-right: auto;
             }
-            .login-container > *+ * {
-                margin-top: 1.5rem;
-            }
-            .login-background {
-                z-index: 10;
-                height: 100vh;
-                background-color: black;
-                opacity: 0.5;
-                position: fixed;
-                top: 0;
-                bottom: 0;
-                right: 0;
-                left: 0;
-                cursor:not-allowed;
-            }
             .login-image {
                 max-height: 6rem;
                 height: 10vh;
-                
             }
-            .button {
-                margin-top: auto;
+            .inputs {
+                width: 100%;
+                --gap: 0.5rem;
             }
             `}</style>
         </div>

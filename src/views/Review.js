@@ -52,8 +52,9 @@ const Review = (props) => {
         <Aux>
             <div className="container">
                 <h1>{userContext?.role} Review</h1>
-                <div className="divider"/>
+                
                 <div className="flow">
+                    <div className="divider"/>
                     <div className="input">
                         <label for="search" className="input-lable">Search by Authorization Number</label>
                         <input className="input-field search-input"
@@ -80,7 +81,8 @@ const Review = (props) => {
                                 return  record.authorization_num.toLowerCase().includes(searchString.toLowerCase())
                             }).map((record) => {
                                 return (
-                                    <tr className={record.authorization_num === selectedProject?.authorization_num ? "row row--selected" : 
+                                    <tr 
+                                        className={record.authorization_num === selectedProject?.authorization_num ? "row row--selected" : 
                                         userContext?.role === 'aer' ? "row" : ""}
                                         ariaRole={userContext?.role === "aer" ? "button": ""}
                                         onClick={userContext?.role === "aer" ? () => {
@@ -108,14 +110,7 @@ const Review = (props) => {
                             })}
                         </tbody>    
                     </table>
-                    {
-                        selectedProject?.status === "submitted" ? 
-                        <div className="submit-buttons-container space">
-                            <button className="button button--submit" onClick={() => handleSubmit("Approved")}>Approve</button>
-                            <button className="button button--deny" onClick={() => handleSubmit("Denied")}>Deny</button>
-                        </div>
-                        : null
-                    }
+                    <div className="space">
                     {
                         selectedProject ?
                         <div className="selected-project shadow">
@@ -124,35 +119,50 @@ const Review = (props) => {
                             {Object.keys(selectedProject).map(key => {
                                 return (
                                     <div>
-                                        <p><span className="h3">{key}: </span>{selectedProject[key]}</p>
+                                        <p><span className="h3">{key.replace('_'," ")}:  </span>{selectedProject[key]}</p>
                                     </div>
                                 )
                             })}
                             </div>
                         </div> : null
                     }
+                    {
+                        selectedProject?.status === "submitted" ? 
+                        <Aux>
+                            <button className="button bg--secondary" onClick={() => handleSubmit("Approved")}>Approve</button>
+                            <button className="button bg--danger" onClick={() => handleSubmit("Denied")}>Deny</button>
+                        </Aux>
+                        : null
+                    }
+                    </div>
                 </div>
             </div>
 
             <style jsx>{`
-            .search-input {
-                max-width: 20rem;
-                background-image: url("./images/searchIcon.svg");
-                background-repeat: no-repeat;
-                background-position: right;
-            }
+                .search-input {
+                    max-width: 20rem;
+                    background-image: url("./images/searchIcon.svg");
+                    background-repeat: no-repeat;
+                    background-position: right;
+                }
                 .selected-project {
+                    width: 100%;
                     max-width: 35rem;
-                    padding: 1rem;
                     background-color: white;
                 }
+                .selected-project h2 {
+                    padding: 0.5rem 1rem;
+                    background-color: var(--cl-primary);
+                    color: white;
+                }
                 .selected-project-details {
+                    padding: 1rem;
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
                     row-gap: 0.2rem;
                 }
                 .selected-project-details span {
-                    color: #0a5688;
+                    color: var(--cl-primary);
                 }
                 .row {
                     cursor: pointer;
