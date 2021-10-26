@@ -10,11 +10,22 @@
     min-height: 60vh;
 }
 
+.flow {
+    display: flex;
+    flex-direction: column;
+}
 .flow > * + * {
     margin-top: 2rem;
 }
 .flow:first-child {
     margin-top: 3rem;
+}
+.flow--between {
+    margin: 0;
+    justify-content: space-between;
+}
+.flow--gap > * + * {
+    margin-top: var(--gap);
 }
 
 .space {

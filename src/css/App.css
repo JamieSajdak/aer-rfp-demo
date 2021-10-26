@@ -27,6 +27,10 @@
   --fg: var(--cl-light-green);
   --bg:white;
 }
+.bg--secondary {
+  --fg: var(--cl-light-green);
+  --bg: white;
+}
 
 .App {
   margin: 0;
