@@ -8,6 +8,18 @@ NodeJS
 React
 Azure Web Services
 
+## Indended Use
+
+DEMO - not full scale application
+
+#Userflow
+Users can login.
+User can review existing records, based on their authorization.
+Authorized users can search for and approve or deny a submission.
+Users can submit a new record, via a for or a csv file.
+Users can add supporting documentation to the record submission.
+Users can logout.
+
 ## Available Scripts
 
 In the project directory, you can run:
