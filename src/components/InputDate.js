@@ -1,6 +1,7 @@
 import React from "react";
 import DatePicker  from 'react-date-picker'
 import Aux from '../hoc/Auxillary';
+import dateIcon from './date_white.svg'
 
 const InputDate = (props) => {
 
@@ -16,7 +17,7 @@ const InputDate = (props) => {
                     className="input-field date"
                     onChange={props.change}
                     value={props.input[props.for] || null}
-                    calendarIcon={<img src={"/images/date_white.svg"} className="date-icon"/>}
+                    calendarIcon={<img src={dateIcon} className="date-icon"/>}
                     maxDate={new Date()}
                 />
             </div>

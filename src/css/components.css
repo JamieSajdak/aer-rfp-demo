@@ -8,6 +8,7 @@
 }
 
 .input-lable {
+    margin-bottom: 0.2rem;
     color: var(--font-primary-color);
     text-transform: capitalize;
     width:100%;

@@ -118,14 +118,13 @@ const Submit = (props) => {
                         <div className="divider"/>
                         {selectedFiles.map(file => <p>{file?.name}</p>)}
                     </div>
-                    <button className="button button--submit button--submit--right" form="record-submission">Submit</button>
+                    <button className="button bg--secondary form-button" form="record-submission">Submit</button>
                 </div>
             </div>
             <style jsx>{`
-                .button--submit--right {
+                .form-button {
                     display:block;
                     margin-left: auto;
-                    
                 }
                 .form {
                     margin-top: 1rem;
