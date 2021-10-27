@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Aux from '../hoc/Auxillary';
 import { UserCxt } from "../services/userContext";
-import { fetchRecords } from '../services/queryApi';
+import { fetchAdminRecords, fetchIndustryRecords } from '../services/queryApi';
 
 const Review = (props) => {
     const { userContext } = useContext(UserCxt);
@@ -14,8 +14,13 @@ const Review = (props) => {
     useEffect(() => {
         console.log(userContext)
         async function fetch() {
-            const data = await fetchRecords()
-            setRecords(data)
+            if(useContext?.Role = "Admin") {
+                const data = await fetchAdminRecords()
+                setRecords(await data)
+            } else {
+                const data = await fetchIndustryRecords(useContext?.UserID)
+                setRecords(await data)
+            }
         }   
         fetch()
     },[])
@@ -38,20 +43,19 @@ const Review = (props) => {
     }
 
     const industryTableHeaders = [
-        // {for: "User Name", click: handleSort, id:"username", isForIndustry: false},
-        {for: "Organization", click: handleSort, id:"organization", isForIndustry: false},
-        {for: "Auth Number", click: handleSort, id:"authorization_num", isForIndustry: true},
-        {for: "Industry Type", click: handleSort, id:"industry_type", isForIndustry: true},
-        {for: "Amt", click: handleSort, id:"amount", isForIndustry: false},
-        {for: "Risk", click: handleSort, id:"risk", isForIndustry: true},
-        {for: "Date", click: handleSort, id:"date_submitted", isForIndustry: false},
-        {for: "Status", click: handleSort, id:"status", isForIndustry: true}
+        //{for: "Organization", click: handleSort, id:"organization", isForIndustry: false},
+        {for: "Auth Number", click: handleSort, id:"AuthorizationID", isForIndustry: true},
+        {for: "Industry Type", click: handleSort, id:"IndustryType", isForIndustry: true},
+        {for: "Amt", click: handleSort, id:"Amount", isForIndustry: false},
+        //{for: "Risk", click: handleSort, id:"risk", isForIndustry: true},
+        {for: "Date", click: handleSort, id:"SubmittedDate", isForIndustry: false},
+        {for: "Status", click: handleSort, id:"Status", isForIndustry: true}
     ]
 
     return (
         <Aux>
             <div className="container">
-                <h1>{userContext?.role} Review</h1>
+                <h1>{userContext?.Role} Review</h1>
                 
                 <div className="flow">
                     <div className="divider"/>
@@ -64,7 +68,7 @@ const Review = (props) => {
                     <table>
                         <thead>
                             {industryTableHeaders.filter(columns => {
-                                return userContext?.role === "aer" ? true : columns.isForIndustry
+                                return userContext?.Role === "Admin" ? true : columns.isForIndustry
                             }).map((header,index) => {
                                 return (
                                 <TableHeaderCell 
@@ -77,16 +81,14 @@ const Review = (props) => {
                             })}
                         </thead>
                         <tbody>
-                            {records.filter(record => {
-                                return  record.authorization_num.toLowerCase().includes(searchString.toLowerCase())
-                            }).map((record) => {
+                            {records.filter.map((record) => {
                                 return (
                                     <tr 
-                                        className={record.authorization_num === selectedProject?.authorization_num ? "row row--selected" : 
-                                        userContext?.role === 'aer' ? "row" : ""}
-                                        ariaRole={userContext?.role === "aer" ? "button": ""}
-                                        onClick={userContext?.role === "aer" ? () => {
-                                            if(selectedProject?.authorization_num === record.authorization_num) {
+                                        className={record.AuthorizationID === selectedProject?.AuthorizationID ? "row row--selected" : 
+                                        userContext?.Role === 'Admin' ? "row" : ""}
+                                        ariaRole={userContext?.Role === "Admin" ? "button": ""}
+                                        onClick={userContext?.Role === "Admin" ? () => {
+                                            if(selectedProject?.AuthorizationID === record.AuthorizationID) {
                                                 setSelectedProject()
                                             } else {
                                                 setSelectedProject(record)
@@ -95,7 +97,7 @@ const Review = (props) => {
                                         } : null}
                                     >
                                         {industryTableHeaders
-                                        .filter(column => userContext?.role === "aer" ? true : column.isForIndustry)
+                                        .filter(column => userContext?.Role === "Admin" ? true : column.isForIndustry)
                                         .map(column => {
                                             if(column.id === "status") {
                                                 return (
