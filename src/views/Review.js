@@ -22,17 +22,20 @@ const Review = (props) => {
     const selecOptionsTemp = ["1", "2", "3", "4"];
 
     useEffect(() => {
-        async function fetch() {
-            if (userContext?.Role === USER_ROLE_AER) {
-                const data = await fetchAdminRecords();
-                setRecords(await data);
-            } else {
-                const data = await fetchIndustryRecords(userContext.UserID);
-                setRecords(await data);
-            }
-        }
-        fetch();
+        fetchRecords();
     }, []);
+
+    const fetchRecords = async () => {
+        if (userContext?.Role === USER_ROLE_AER) {
+            const data = await fetchAdminRecords();
+            console.log(data);
+            setRecords(await data);
+        } else {
+            const data = await fetchIndustryRecords(userContext.UserID);
+            setRecords(await data);
+        }
+        setInput("");
+    };
 
     const handleSort = (event, index) => {
         const sortedRecords = [...records].sort((a, b) => {
@@ -54,6 +57,7 @@ const Review = (props) => {
     const handleSearchByWellID = async (event) => {
         const value = event.target.value;
         console.log(value);
+        setInput(value);
         const recordsByWellID = await fetchRecordsByWellID(
             userContext?.UserID,
             value
@@ -111,6 +115,7 @@ const Review = (props) => {
                         options={selecOptionsTemp}
                         placeholder="Select Authoirization number"
                     />
+                    <button onClick={fetchRecords}>Cancel</button>
                     <table>
                         <thead>
                             {industryTableHeaders
@@ -132,70 +137,83 @@ const Review = (props) => {
                                 })}
                         </thead>
                         <tbody>
-                            {records.map((record, index) => {
-                                return (
-                                    <tr
-                                        index={index}
-                                        className={
-                                            record.AuthorizationID ===
-                                            selectedProject?.AuthorizationID
-                                                ? "row row--selected"
-                                                : userContext?.Role ===
+                            {records?.error
+                                ? null
+                                : records.map((record, index) => {
+                                      return (
+                                          <tr
+                                              index={index}
+                                              className={
+                                                  record.id ===
+                                                  selectedProject?.id
+                                                      ? "row row--selected"
+                                                      : userContext?.Role ===
+                                                        USER_ROLE_AER
+                                                      ? "row"
+                                                      : ""
+                                              }
+                                              ariaRole={
+                                                  userContext?.Role ===
                                                   USER_ROLE_AER
-                                                ? "row"
-                                                : ""
-                                        }
-                                        ariaRole={
-                                            userContext?.Role === USER_ROLE_AER
-                                                ? "button"
-                                                : ""
-                                        }
-                                        onClick={
-                                            userContext?.Role === USER_ROLE_AER
-                                                ? () => {
+                                                      ? "button"
+                                                      : ""
+                                              }
+                                              onClick={
+                                                  userContext?.Role ===
+                                                  USER_ROLE_AER
+                                                      ? () => {
+                                                            if (
+                                                                selectedProject?.id ===
+                                                                record.id
+                                                            ) {
+                                                                setSelectedProject();
+                                                            } else {
+                                                                setSelectedProject(
+                                                                    record
+                                                                );
+                                                            }
+                                                        }
+                                                      : null
+                                              }
+                                          >
+                                              {industryTableHeaders
+                                                  .filter((column) =>
+                                                      userContext?.Role ===
+                                                      USER_ROLE_AER
+                                                          ? true
+                                                          : column.isForIndustry
+                                                  )
+                                                  .map((column, i) => {
                                                       if (
-                                                          selectedProject?.AuthorizationID ===
-                                                          record.AuthorizationID
+                                                          column.id === "Status"
                                                       ) {
-                                                          setSelectedProject();
-                                                      } else {
-                                                          setSelectedProject(
-                                                              record
+                                                          return (
+                                                              <td key={i}>
+                                                                  <div
+                                                                      className={
+                                                                          "table-status table-status--" +
+                                                                          record.Status
+                                                                      }
+                                                                  >
+                                                                      {record.Status +
+                                                                          "hmm"}
+                                                                  </div>
+                                                              </td>
                                                           );
                                                       }
-                                                  }
-                                                : null
-                                        }
-                                    >
-                                        {industryTableHeaders
-                                            .filter((column) =>
-                                                userContext?.Role ===
-                                                USER_ROLE_AER
-                                                    ? true
-                                                    : column.isForIndustry
-                                            )
-                                            .map((column, i) => {
-                                                if (column.id === "Status") {
-                                                    return (
-                                                        <td key={i}>
-                                                            <div
-                                                                className={
-                                                                    "table-status table-status--" +
-                                                                    record.status
-                                                                }
-                                                            >
-                                                                {record.status}
-                                                            </div>
-                                                        </td>
-                                                    );
-                                                }
-                                                return (
-                                                    <td>{record[column.id]}</td>
-                                                );
-                                            })}
-                                    </tr>
-                                );
-                            })}
+                                                      return (
+                                                          <td>
+                                                              {
+                                                                  record[
+                                                                      column.id
+                                                                  ]
+                                                              }
+                                                          </td>
+                                                      );
+                                                  })}
+                                          </tr>
+                                      );
+                                  })}
                         </tbody>
                     </table>
                     <div className="space">
@@ -218,7 +236,7 @@ const Review = (props) => {
                                 </div>
                             </div>
                         ) : null}
-                        {selectedProject?.status === "submitted" ? (
+                        {selectedProject?.Status === "Submitted" ? (
                             <Aux>
                                 <button
                                     className="button bg--secondary"

@@ -3,7 +3,7 @@ import "./css/layout.css";
 import "./css/components.css";
 import "./css/layout.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Login from "./components/Login";
@@ -14,9 +14,13 @@ import { UserCxt } from "./services/userContext";
 
 function App() {
     const [userContext, setUserContext] = useState({});
+    const [formContext, setFormContext] = useState({});
 
+    useEffect(() => {}, []);
     return (
-        <UserCxt.Provider value={{ userContext, setUserContext }}>
+        <UserCxt.Provider
+            value={{ userContext, setUserContext, formContext, setFormContext }}
+        >
             <div className="App">
                 {userContext?.auth !== "success" ? <Login /> : null}
                 <Header />

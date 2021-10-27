@@ -8,13 +8,9 @@ export const authorizeUser = async (userID, password) => {
         BASE_URL +
         `/api/Industry/CheckLoginAndGetUserDetails/${userID},${password}`;
 
-    const authUrl =
-        BASE_URL + `/api/Industry/GetAuthorizationByUserID/${userID}`;
     try {
         const user = await axios.get(url);
         const userData = await user.data;
-        const userAuth = await axios.get(authUrl);
-        console.log(userAuth.data);
         return userData[0];
     } catch (e) {
         console.log(e);
@@ -60,3 +56,5 @@ export const fetchAdminRecords = async () => {
         return { error: "Could not fetch Admin Record results" };
     }
 };
+
+// export const fetch
