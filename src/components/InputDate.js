@@ -18,6 +18,7 @@ const InputDate = (props) => {
                     onChange={props.change}
                     value={props.input[props.for] || null}
                     calendarIcon={<img src={dateIcon} className="date-icon"/>}
+                    alt="pick a date"
                     maxDate={new Date()}
                 />
             </div>
