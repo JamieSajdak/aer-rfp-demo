@@ -56,7 +56,7 @@ const Review = (props) => {
                 <div className="flow">
                     <div className="divider"/>
                     <div className="input">
-                        <label for="search" className="input-lable">Search by Authorization Number</label>
+                        <label for="search" className="input-label">Search by Authorization Number</label>
                         <input className="input-field search-input"
                             value={searchString}
                             onChange={(event)=> setSearchString(event.target.value)}></input>
