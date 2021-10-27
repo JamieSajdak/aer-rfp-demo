@@ -1,141 +1,218 @@
 import React, { useContext, useEffect, useState } from "react";
-import Aux from '../hoc/Auxillary';
+import Aux from "../hoc/Auxillary";
 import { UserCxt } from "../services/userContext";
-import { fetchAdminRecords, fetchIndustryRecords } from '../services/queryApi';
+import {
+    fetchAdminRecords,
+    fetchIndustryRecords,
+    fetchRecordsByWellID,
+} from "../services/queryApi";
 
 const Review = (props) => {
+    const USER_ROLE_AER = "AER";
+
     const { userContext } = useContext(UserCxt);
-    const [ records, setRecords ] = useState([]);
-    const [ isAsc, setIsAsc ] = useState(true);
-    const [ selectedHeaderIndex, setSelectedHeaderIndex ] = useState();
-    const [ selectedProject , setSelectedProject]= useState();
-    const [ searchString, setSearchString ] = useState("");
+    const [records, setRecords] = useState([]);
+    const [isAsc, setIsAsc] = useState(true);
+    const [selectedHeaderIndex, setSelectedHeaderIndex] = useState();
+    const [selectedProject, setSelectedProject] = useState();
+    const [searchString, setSearchString] = useState("");
 
     useEffect(() => {
-        console.log(userContext)
         async function fetch() {
-            if(useContext?.Role = "Admin") {
-                const data = await fetchAdminRecords()
-                setRecords(await data)
+            if (userContext?.Role === USER_ROLE_AER) {
+                const data = await fetchAdminRecords();
+                setRecords(await data);
             } else {
-                const data = await fetchIndustryRecords(useContext?.UserID)
-                setRecords(await data)
+                const data = await fetchIndustryRecords(useContext.UserID);
+                setRecords(await data);
             }
-        }   
-        fetch()
-    },[])
+        }
+        fetch();
+    }, []);
 
-    const handleSort = (event,index) => {
-        const sortedRecords = [...records].sort((a,b) => {
-            if(a[event.target.id] < b[event.target.id]) {
-                return isAsc ? -1 : 1
+    const handleSort = (event, index) => {
+        const sortedRecords = [...records].sort((a, b) => {
+            if (a[event.target.id] < b[event.target.id]) {
+                return isAsc ? -1 : 1;
             }
-            return isAsc ? 1 : -1
-        })
+            return isAsc ? 1 : -1;
+        });
         setRecords(sortedRecords);
-        setIsAsc(!isAsc)
-        setSelectedHeaderIndex(index)
-    }
+        setIsAsc(!isAsc);
+        setSelectedHeaderIndex(index);
+    };
 
     const handleSubmit = (decision) => {
-        alert("Project is: " + decision)
-        setSelectedProject()
-    }
+        alert("Project is: " + decision);
+        setSelectedProject();
+    };
 
     const industryTableHeaders = [
         //{for: "Organization", click: handleSort, id:"organization", isForIndustry: false},
-        {for: "Auth Number", click: handleSort, id:"AuthorizationID", isForIndustry: true},
-        {for: "Industry Type", click: handleSort, id:"IndustryType", isForIndustry: true},
-        {for: "Amt", click: handleSort, id:"Amount", isForIndustry: false},
+        {
+            for: "Auth Number",
+            click: handleSort,
+            id: "AuthorizationID",
+            isForIndustry: true,
+        },
+        {
+            for: "Industry Type",
+            click: handleSort,
+            id: "IndustryType",
+            isForIndustry: true,
+        },
+        { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
         //{for: "Risk", click: handleSort, id:"risk", isForIndustry: true},
-        {for: "Date", click: handleSort, id:"SubmittedDate", isForIndustry: false},
-        {for: "Status", click: handleSort, id:"Status", isForIndustry: true}
-    ]
+        {
+            for: "Date",
+            click: handleSort,
+            id: "SubmittedDate",
+            isForIndustry: false,
+        },
+        { for: "Status", click: handleSort, id: "Status", isForIndustry: true },
+    ];
 
     return (
         <Aux>
             <div className="container">
                 <h1>{userContext?.Role} Review</h1>
-                
                 <div className="flow">
-                    <div className="divider"/>
+                    <div className="divider" />
                     <div className="input">
-                        <label for="search" className="input-label">Search by Authorization Number</label>
-                        <input className="input-field search-input"
+                        <label for="search" className="input-label">
+                            Search by Authorization Number
+                        </label>
+                        <input
+                            className="input-field search-input"
                             value={searchString}
-                            onChange={(event)=> setSearchString(event.target.value)}></input>
+                            onChange={(event) =>
+                                setSearchString(event.target.value)
+                            }
+                        ></input>
                     </div>
                     <table>
                         <thead>
-                            {industryTableHeaders.filter(columns => {
-                                return userContext?.Role === "Admin" ? true : columns.isForIndustry
-                            }).map((header,index) => {
-                                return (
-                                <TableHeaderCell 
-                                    for={header.for} 
-                                    id={header.id}
-                                    click={handleSort}
-                                    index={index}
-                                    selectedIndex={selectedHeaderIndex}
-                                />)
-                            })}
+                            {industryTableHeaders
+                                .filter((columns) => {
+                                    return userContext?.Role === USER_ROLE_AER
+                                        ? true
+                                        : columns.isForIndustry;
+                                })
+                                .map((header, index) => {
+                                    return (
+                                        <TableHeaderCell
+                                            for={header.for}
+                                            id={header.id}
+                                            click={handleSort}
+                                            index={index}
+                                            selectedIndex={selectedHeaderIndex}
+                                        />
+                                    );
+                                })}
                         </thead>
                         <tbody>
-                            {records.filter.map((record) => {
+                            {records.map((record, index) => {
                                 return (
-                                    <tr 
-                                        className={record.AuthorizationID === selectedProject?.AuthorizationID ? "row row--selected" : 
-                                        userContext?.Role === 'Admin' ? "row" : ""}
-                                        ariaRole={userContext?.Role === "Admin" ? "button": ""}
-                                        onClick={userContext?.Role === "Admin" ? () => {
-                                            if(selectedProject?.AuthorizationID === record.AuthorizationID) {
-                                                setSelectedProject()
-                                            } else {
-                                                setSelectedProject(record)
-                                            }
-                                        
-                                        } : null}
+                                    <tr
+                                        index={index}
+                                        className={
+                                            record.AuthorizationID ===
+                                            selectedProject?.AuthorizationID
+                                                ? "row row--selected"
+                                                : userContext?.Role ===
+                                                  USER_ROLE_AER
+                                                ? "row"
+                                                : ""
+                                        }
+                                        ariaRole={
+                                            userContext?.Role === USER_ROLE_AER
+                                                ? "button"
+                                                : ""
+                                        }
+                                        onClick={
+                                            userContext?.Role === USER_ROLE_AER
+                                                ? () => {
+                                                      if (
+                                                          selectedProject?.AuthorizationID ===
+                                                          record.AuthorizationID
+                                                      ) {
+                                                          setSelectedProject();
+                                                      } else {
+                                                          setSelectedProject(
+                                                              record
+                                                          );
+                                                      }
+                                                  }
+                                                : null
+                                        }
                                     >
                                         {industryTableHeaders
-                                        .filter(column => userContext?.Role === "Admin" ? true : column.isForIndustry)
-                                        .map(column => {
-                                            if(column.id === "status") {
+                                            .filter((column) =>
+                                                userContext?.Role ===
+                                                USER_ROLE_AER
+                                                    ? true
+                                                    : column.isForIndustry
+                                            )
+                                            .map((column, i) => {
+                                                if (column.id === "Status") {
+                                                    return (
+                                                        <td key={i}>
+                                                            <div
+                                                                className={
+                                                                    "table-status table-status--" +
+                                                                    record.status
+                                                                }
+                                                            >
+                                                                {record.status}
+                                                            </div>
+                                                        </td>
+                                                    );
+                                                }
                                                 return (
-                                                <td><div className={"table-status table-status--" + record.status}>
-                                                    {record.status}
-                                                </div></td>)
-                                            }
-                                            return <td>{record[column.id]}</td>
-                                        })}
-                                    </tr> 
-                                )
+                                                    <td>{record[column.id]}</td>
+                                                );
+                                            })}
+                                    </tr>
+                                );
                             })}
-                        </tbody>    
+                        </tbody>
                     </table>
                     <div className="space">
-                    {
-                        selectedProject ?
-                        <div className="selected-project shadow">
-                            <h2>Project Details</h2>
-                            <div className="selected-project-details">
-                            {Object.keys(selectedProject).map(key => {
-                                return (
-                                    <div>
-                                        <p><span className="h3">{key.replace('_'," ")}:  </span>{selectedProject[key]}</p>
-                                    </div>
-                                )
-                            })}
+                        {selectedProject ? (
+                            <div className="selected-project shadow">
+                                <h2>Project Details</h2>
+                                <div className="selected-project-details">
+                                    {Object.keys(selectedProject).map((key) => {
+                                        return (
+                                            <div>
+                                                <p>
+                                                    <span className="h3">
+                                                        {key.replace("_", " ")}:{" "}
+                                                    </span>
+                                                    {selectedProject[key]}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div> : null
-                    }
-                    {
-                        selectedProject?.status === "submitted" ? 
-                        <Aux>
-                            <button className="button bg--secondary" onClick={() => handleSubmit("Approved")}>Approve</button>
-                            <button className="button bg--danger" onClick={() => handleSubmit("Denied")}>Deny</button>
-                        </Aux>
-                        : null
-                    }
+                        ) : null}
+                        {selectedProject?.status === "submitted" ? (
+                            <Aux>
+                                <button
+                                    className="button bg--secondary"
+                                    onClick={() => handleSubmit("Approved")}
+                                >
+                                    Approve
+                                </button>
+                                <button
+                                    className="button bg--danger"
+                                    onClick={() => handleSubmit("Denied")}
+                                >
+                                    Deny
+                                </button>
+                            </Aux>
+                        ) : null}
                     </div>
                 </div>
             </div>
@@ -151,7 +228,7 @@ const Review = (props) => {
                     width: 100%;
                     max-width: 35rem;
                     background-color: white;
-                    margin-right:auto;
+                    margin-right: auto;
                 }
                 .selected-project h2 {
                     padding: 0.5rem 1rem;
@@ -162,7 +239,10 @@ const Review = (props) => {
                     text-transform: capitalize;
                     padding: 1rem;
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+                    grid-template-columns: repeat(
+                        auto-fill,
+                        minmax(15rem, 1fr)
+                    );
                     row-gap: 0.2rem;
                 }
                 .selected-project-details span {
@@ -181,7 +261,7 @@ const Review = (props) => {
                     border-radius: 1000px;
                     font-weight: 700;
                     width: 100%;
-                    height:100%;
+                    height: 100%;
                 }
                 .table-status--submitted {
                     color: var(--cl-submitted);
@@ -202,18 +282,26 @@ const Review = (props) => {
                 }
             `}</style>
         </Aux>
-    )
-}
+    );
+};
 
 const TableHeaderCell = (props) => {
     return (
         <th>
-            <div className="table-header-container" >
+            <div className="table-header-container">
                 {props.for}
-                <button className={`table-header-button ${props.index === props.selectedIndex ? "table-header-button--selected" : ""}`} id={props.id} onClick={(event) => props.click(event,props.index)}></button>
+                <button
+                    className={`table-header-button ${
+                        props.index === props.selectedIndex
+                            ? "table-header-button--selected"
+                            : ""
+                    }`}
+                    id={props.id}
+                    onClick={(event) => props.click(event, props.index)}
+                ></button>
             </div>
         </th>
-    )
-}
+    );
+};
 
-export default Review
+export default Review;
