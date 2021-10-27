@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const PROXY = "https://afternoon-sierra-79620.herokuapp.com/";
-const BASE_URL = PROXY + "https://aerapidemo.azurewebsites.net/";
+const BASE_URL = PROXY + "https://aerapidemo.azurewebsites.net";
 
 export const authorizeUser = async (userID, password) => {
     const url =
@@ -24,10 +24,12 @@ export const authorizeUser = async (userID, password) => {
 
 export const fetchIndustryRecords = async (userID) => {
     const url = BASE_URL + `/api/Industry/GetRecordsByUserID/${userID}`;
-
+    console.log(url);
     try {
         const industryResults = await axios.get(url);
-        return await industryResults.data;
+        const data = await industryResults.data;
+        console.log(data);
+        return data;
     } catch (e) {
         console.log(e);
         return { error: "Could not fetch Insutry Record results" };
@@ -40,7 +42,6 @@ export const fetchRecordsByWellID = async (userID, wellID) => {
     try {
         const industryResults = await axios.get(url);
         const industryData = await industryResults.data;
-        console.log(industryData);
         return industryData;
     } catch (e) {
         console.log(e);

@@ -6,7 +6,7 @@ import { UserCxt } from "../services/userContext";
 import { authorizeUser } from "../services/queryApi";
 
 const Layout = (props) => {
-    const { userContext, setUserContext } = useContext(UserCxt);
+    const { setUserContext } = useContext(UserCxt);
 
     const submitLogin = async () => {
         const userAuth = await authorizeUser(input.username, input.password);

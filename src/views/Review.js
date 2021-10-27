@@ -7,6 +7,8 @@ import {
     fetchRecordsByWellID,
 } from "../services/queryApi";
 
+import SelectField from "../components/SelectField";
+
 const Review = (props) => {
     const USER_ROLE_AER = "AER";
 
@@ -15,7 +17,9 @@ const Review = (props) => {
     const [isAsc, setIsAsc] = useState(true);
     const [selectedHeaderIndex, setSelectedHeaderIndex] = useState();
     const [selectedProject, setSelectedProject] = useState();
-    const [searchString, setSearchString] = useState("");
+    const [input, setInput] = useState("");
+
+    const selecOptionsTemp = ["1", "2", "3", "4"];
 
     useEffect(() => {
         async function fetch() {
@@ -23,7 +27,7 @@ const Review = (props) => {
                 const data = await fetchAdminRecords();
                 setRecords(await data);
             } else {
-                const data = await fetchIndustryRecords(useContext.UserID);
+                const data = await fetchIndustryRecords(userContext.UserID);
                 setRecords(await data);
             }
         }
@@ -47,8 +51,23 @@ const Review = (props) => {
         setSelectedProject();
     };
 
+    const handleSearchByWellID = async (event) => {
+        const value = event.target.value;
+        console.log(value);
+        const recordsByWellID = await fetchRecordsByWellID(
+            userContext?.UserID,
+            value
+        );
+        setRecords(await recordsByWellID);
+    };
+
     const industryTableHeaders = [
-        //{for: "Organization", click: handleSort, id:"organization", isForIndustry: false},
+        {
+            for: "Organization",
+            click: handleSort,
+            id: "Organization",
+            isForIndustry: true,
+        },
         {
             for: "Auth Number",
             click: handleSort,
@@ -62,14 +81,19 @@ const Review = (props) => {
             isForIndustry: true,
         },
         { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
-        //{for: "Risk", click: handleSort, id:"risk", isForIndustry: true},
+        { for: "Risk", click: handleSort, id: "risk", isForIndustry: true },
         {
             for: "Date",
             click: handleSort,
             id: "SubmittedDate",
             isForIndustry: false,
         },
-        { for: "Status", click: handleSort, id: "Status", isForIndustry: true },
+        {
+            for: "Status",
+            click: handleSort,
+            id: "Status ",
+            isForIndustry: true,
+        },
     ];
 
     return (
@@ -78,18 +102,15 @@ const Review = (props) => {
                 <h1>{userContext?.Role} Review</h1>
                 <div className="flow">
                     <div className="divider" />
-                    <div className="input">
-                        <label for="search" className="input-label">
-                            Search by Authorization Number
-                        </label>
-                        <input
-                            className="input-field search-input"
-                            value={searchString}
-                            onChange={(event) =>
-                                setSearchString(event.target.value)
-                            }
-                        ></input>
-                    </div>
+                    <SelectField
+                        for="authorization_num"
+                        label="Authorization Number"
+                        input={{ authorization_num: input }}
+                        errors={{}}
+                        change={handleSearchByWellID}
+                        options={selecOptionsTemp}
+                        placeholder="Select Authoirization number"
+                    />
                     <table>
                         <thead>
                             {industryTableHeaders

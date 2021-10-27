@@ -48,7 +48,7 @@ const Submit = (props) => {
         });
     };
 
-    const selecOptionsTemp = ["option1", "option2", "option3", "option4"];
+    const selecOptionsTemp = ["1", "2", "3", "4"];
 
     return (
         <Aux>
