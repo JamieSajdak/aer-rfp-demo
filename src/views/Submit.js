@@ -8,12 +8,14 @@ import InputFile from "../components/InputFile";
 import SelectField from "../components/SelectField";
 import InputDate from "../components/InputDate";
 import { UserCxt } from "../services/userContext";
+import { postNewRecord } from "../services/queryApi";
 
 const Submit = (props) => {
     const { userContext } = useContext(UserCxt);
 
-    const formSubmit = () => {
-        alert("form submitted: ");
+    const formSubmit = async () => {
+        const submit = await postNewRecord(input, userContext);
+        alert("form submitted: ", await submit);
         setInput({});
         setSelectedFiles([]);
     };

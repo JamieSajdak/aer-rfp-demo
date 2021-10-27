@@ -23,7 +23,10 @@ const useForm = (submitForm, validateInput) => {
                 });
                 lines[0].forEach((header, index) => {
                     handleChange({
-                        target: { value: lines[1][index], name: header.trim() },
+                        target: {
+                            value: lines[1][index].replace(/[\n\t\r]/g, ""),
+                            name: header.trim(),
+                        },
                     });
                 });
             };

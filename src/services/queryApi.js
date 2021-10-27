@@ -1,4 +1,5 @@
 import axios from "axios";
+const dayjs = require("dayjs");
 
 const PROXY = "https://afternoon-sierra-79620.herokuapp.com/";
 const BASE_URL = PROXY + "https://aerapidemo.azurewebsites.net";
@@ -57,4 +58,35 @@ export const fetchAdminRecords = async () => {
     }
 };
 
-// export const fetch
+export const postNewRecord = async (record, { UserID, Organization }) => {
+    const date = new dayjs(record.date);
+    const url = BASE_URL + "/api/Industry";
+    const newRecord = {
+        id: UserID + record.well_id,
+        UserID: "Steve",
+        WellID: record.well_id,
+        AuthorizationID: "Auth4",
+        IndustryType: record.industry_type,
+        SubmittedID: 0,
+        SubmittedBy: UserID,
+        SubmittedDate: date.format("YYYY-MM-DD"),
+        IndustryName: record.industry_name,
+        ApprovedID: 0,
+        ApprovedBy: null,
+        ApprovedDate: "1900-01-01",
+        Organization: Organization,
+        Amount: record.amount,
+        Status: "Submitted",
+        FileName: null,
+        LocalFilePath: null,
+    };
+
+    console.log(newRecord);
+    try {
+        const post = await axios.post(url, newRecord);
+        console.log(post);
+        return post;
+    } catch (e) {
+        return { error: "Could post record" };
+    }
+};
