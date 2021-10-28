@@ -11,16 +11,13 @@ const Layout = (props) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const submitLogin = async () => {
-        console.log("Loging in");
         setIsLoading(true);
         const userAuth = await authorizeUser(input.username, input.password);
         if (await userAuth?.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
             const authIds = await fetchAuthIdsForUser(userAuth.UserID);
-            const authIdLength = await authIds.length;
-            console.log(await authIds);
-            if (authIdLength > 0) {
+            if (await authIds.UserID) {
                 setFormContext({
                     authOptions: [
                         ...(await authIds.map(
