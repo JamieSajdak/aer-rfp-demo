@@ -68,7 +68,9 @@ const Layout = (props) => {
                             errors={errors}
                         />
                     </div>
-                    <button className="button button--submit bg--secondary"></button>
+                    <button className="button button--submit bg--secondary">
+                        Login
+                    </button>
                 </form>
             </div>
             <style jsx>{`

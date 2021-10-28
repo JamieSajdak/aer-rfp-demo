@@ -102,7 +102,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             change={handleChange}
-                            placeholder="Select Industry Type"
+                            placeholder="Enter Industry Type"
                         />
                         <InputTextField
                             for="amount"
@@ -110,7 +110,7 @@ const Submit = (props) => {
                             input={input}
                             type="number"
                             change={handleChange}
-                            placeholder="Enter Well ID"
+                            placeholder="Enter Amount"
                         />
                         <InputFile
                             for="auto"
