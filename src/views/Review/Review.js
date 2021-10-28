@@ -13,6 +13,7 @@ import SelectField from "../../components/SelectField";
 
 import Aux from "../../hoc/Auxillary";
 import ReviewTable from "./ReviewTable";
+import Spinner from "../../components/Spiner";
 
 const Review = (props) => {
     const USER_ROLE_AER = "AER";
@@ -23,6 +24,7 @@ const Review = (props) => {
     const [selectedHeaderIndex, setSelectedHeaderIndex] = useState();
     const [selectedProject, setSelectedProject] = useState();
     const [input, setInput] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         console.log(formContext);
@@ -30,6 +32,7 @@ const Review = (props) => {
     }, []);
 
     const fetchRecords = async () => {
+        setIsLoading(true);
         if (userContext?.Role === USER_ROLE_AER) {
             const data = await fetchAdminRecords();
             if (!data?.error) {
@@ -41,6 +44,7 @@ const Review = (props) => {
             const data = await fetchIndustryRecords(userContext.UserID);
             setRecords(await data);
         }
+        setIsLoading(false);
         setInput("");
     };
 
@@ -113,12 +117,21 @@ const Review = (props) => {
                             options={formContext.authOptions}
                             placeholder="Select Authoirization number"
                         >
-                            <button onClick={fetchRecords} className="cancel">
-                                <img
-                                    src={"/images/refrechIcon.svg"}
-                                    alt="refresh"
-                                ></img>
-                            </button>
+                            {isLoading ? (
+                                <div className="cancel">
+                                    <Spinner />
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={fetchRecords}
+                                    className="cancel"
+                                >
+                                    <img
+                                        src={"/images/refrechIcon.svg"}
+                                        alt="refresh"
+                                    ></img>
+                                </button>
+                            )}
                         </SelectField>
                     </div>
                     {records[0]?.error ? (
@@ -257,6 +270,7 @@ const Review = (props) => {
                     border: none;
                     color: white;
                     width: 3rem;
+                    padding: 0.2rem;
                 }
             `}</style>
         </Aux>

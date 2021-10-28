@@ -65,8 +65,10 @@ const fetchRecords = async (url) => {
     }
 };
 
-export const fetchAuthIdsForUser = async (userID) => {
-    const url = BASE_URL + `/api/Industry/GetAuthorizationByUserID/${userID}`;
+export const fetchAuthIdsForUser = async (userID, role, authID) => {
+    const url =
+        BASE_URL +
+        `/api/Industry/GetAuthorizationByUserID/${userID},${role},${authID}`;
     try {
         const authIds = await axios.get(url);
         return await authIds.data;
@@ -81,15 +83,15 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
         id: UserID + record.well_id,
-        UserID: "Steve",
+        UserID: UserID,
         WellID: record.well_id,
         AuthorizationID: "Auth4",
         IndustryType: record.industry_type,
-        SubmittedID: 0,
+        SubmittedID: record.SubmittedID + 1,
         SubmittedBy: UserID,
         SubmittedDate: date.format("YYYY-MM-DD"),
         IndustryName: record.industry_name,
-        ApprovedID: 0,
+        ApprovedID: record.ApprovedID + 1,
         ApprovedBy: null,
         ApprovedDate: "1900-01-01",
         Organization: Organization,

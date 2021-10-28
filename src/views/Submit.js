@@ -14,7 +14,11 @@ const Submit = (props) => {
     const { userContext, formContext } = useContext(UserCxt);
 
     const formSubmit = async () => {
-        const submit = await postNewRecord(input, userContext);
+        const submit = await postNewRecord(
+            input,
+            userContext.role,
+            userContext.authID
+        );
         alert("form submitted: ", await submit);
         setInput({});
         setSelectedFiles([]);
