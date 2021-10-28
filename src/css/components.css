@@ -63,7 +63,15 @@
     font-size: 0.8rem;
     min-width: 6rem;
 }
-
+.button--loading {
+    min-height: 3rem;
+    padding: 0.2rem;
+    cursor: not-allowed;
+}
+.button--loading:hover {
+    background-color: var(--bg);
+    color: var(--fg);
+}
 .button--file:hover {
     background-color: white;
     color: var(--cl-primary);
