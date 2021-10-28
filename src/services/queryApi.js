@@ -81,10 +81,8 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
         LocalFilePath: null,
     };
 
-    console.log(newRecord);
     try {
         const post = await axios.post(url, newRecord);
-        console.log(post);
         return post;
     } catch (e) {
         return { error: "Could post record" };

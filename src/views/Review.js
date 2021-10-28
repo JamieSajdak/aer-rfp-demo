@@ -4,7 +4,7 @@ import { UserCxt } from "../services/userContext";
 import {
     fetchAdminRecords,
     fetchIndustryRecords,
-    fetchRecordsByWellID,
+    fetchRecordsByWellID
 } from "../services/queryApi";
 
 import SelectField from "../components/SelectField";
@@ -19,6 +19,7 @@ const Review = (props) => {
     const [selectedProject, setSelectedProject] = useState();
     const [input, setInput] = useState("");
 
+    const isUserAer = userContext.Role === USER_ROLE_AER;
     const selecOptionsTemp = ["1", "2", "3", "4"];
 
     useEffect(() => {
@@ -70,19 +71,19 @@ const Review = (props) => {
             for: "Organization",
             click: handleSort,
             id: "Organization",
-            isForIndustry: true,
+            isForIndustry: true
         },
         {
             for: "Auth Number",
             click: handleSort,
             id: "AuthorizationID",
-            isForIndustry: true,
+            isForIndustry: true
         },
         {
             for: "Industry Type",
             click: handleSort,
             id: "IndustryType",
-            isForIndustry: true,
+            isForIndustry: true
         },
         { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
         { for: "Risk", click: handleSort, id: "risk", isForIndustry: true },
@@ -90,15 +91,28 @@ const Review = (props) => {
             for: "Date",
             click: handleSort,
             id: "SubmittedDate",
-            isForIndustry: false,
+            isForIndustry: false
         },
         {
             for: "Status",
             click: handleSort,
-            id: "Status ",
-            isForIndustry: true,
-        },
-    ];
+            id: "Status",
+            isForIndustry: true
+        }
+    ].filter((column) => {
+        console.log("filtering");
+        return userContext?.Role === USER_ROLE_AER
+            ? true
+            : column.isForIndustry;
+    });
+
+    const selectProjectClick = (record) => {
+        if (selectedProject?.id === record.id) {
+            setSelectedProject();
+        } else {
+            setSelectedProject(record);
+        }
+    };
 
     return (
         <Aux>
@@ -118,23 +132,17 @@ const Review = (props) => {
                     <button onClick={fetchRecords}>Cancel</button>
                     <table>
                         <thead>
-                            {industryTableHeaders
-                                .filter((columns) => {
-                                    return userContext?.Role === USER_ROLE_AER
-                                        ? true
-                                        : columns.isForIndustry;
-                                })
-                                .map((header, index) => {
-                                    return (
-                                        <TableHeaderCell
-                                            for={header.for}
-                                            id={header.id}
-                                            click={handleSort}
-                                            index={index}
-                                            selectedIndex={selectedHeaderIndex}
-                                        />
-                                    );
-                                })}
+                            {industryTableHeaders.map((header, index) => {
+                                return (
+                                    <TableHeaderCell
+                                        for={header.for}
+                                        id={header.id}
+                                        click={handleSort}
+                                        index={index}
+                                        selectedIndex={selectedHeaderIndex}
+                                    />
+                                );
+                            })}
                         </thead>
                         <tbody>
                             {records?.error
@@ -147,62 +155,36 @@ const Review = (props) => {
                                                   record.id ===
                                                   selectedProject?.id
                                                       ? "row row--selected"
-                                                      : userContext?.Role ===
-                                                        USER_ROLE_AER
+                                                      : isUserAer
                                                       ? "row"
                                                       : ""
                                               }
                                               ariaRole={
-                                                  userContext?.Role ===
-                                                  USER_ROLE_AER
-                                                      ? "button"
-                                                      : ""
+                                                  isUserAer ? "button" : ""
                                               }
                                               onClick={
-                                                  userContext?.Role ===
-                                                  USER_ROLE_AER
-                                                      ? () => {
-                                                            if (
-                                                                selectedProject?.id ===
-                                                                record.id
-                                                            ) {
-                                                                setSelectedProject();
-                                                            } else {
-                                                                setSelectedProject(
-                                                                    record
-                                                                );
-                                                            }
-                                                        }
+                                                  isUserAer
+                                                      ? () =>
+                                                            selectProjectClick(
+                                                                record
+                                                            )
                                                       : null
                                               }
                                           >
-                                              {industryTableHeaders
-                                                  .filter((column) =>
-                                                      userContext?.Role ===
-                                                      USER_ROLE_AER
-                                                          ? true
-                                                          : column.isForIndustry
-                                                  )
-                                                  .map((column, i) => {
-                                                      if (
-                                                          column.id === "Status"
-                                                      ) {
-                                                          return (
-                                                              <td key={i}>
-                                                                  <div
-                                                                      className={
-                                                                          "table-status table-status--" +
-                                                                          record.Status
-                                                                      }
-                                                                  >
-                                                                      {record.Status +
-                                                                          "hmm"}
-                                                                  </div>
-                                                              </td>
-                                                          );
-                                                      }
+                                              {industryTableHeaders.map(
+                                                  (column, idx) => {
                                                       return (
-                                                          <td>
+                                                          <td
+                                                              className={[
+                                                                  column.id ===
+                                                                  "Status"
+                                                                      ? "table-status"
+                                                                      : "",
+                                                                  record[
+                                                                      column.id
+                                                                  ]
+                                                              ].join(" ")}
+                                                          >
                                                               {
                                                                   record[
                                                                       column.id
@@ -210,7 +192,8 @@ const Review = (props) => {
                                                               }
                                                           </td>
                                                       );
-                                                  })}
+                                                  }
+                                              )}
                                           </tr>
                                       );
                                   })}
@@ -296,19 +279,15 @@ const Review = (props) => {
                 }
                 .table-status {
                     color: white;
-                    text-align: center;
-                    border-radius: 1000px;
                     font-weight: 700;
-                    width: 100%;
-                    height: 100%;
                 }
-                .table-status--submitted {
+                .Submitted {
                     color: var(--cl-submitted);
                 }
-                .table-status--denied {
+                .Denied {
                     color: var(--cl-danger);
                 }
-                .table-status--accepted {
+                .Approved {
                     color: var(--cl-light-green);
                 }
                 .submit-buttons-container {
