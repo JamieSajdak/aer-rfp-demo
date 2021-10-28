@@ -9,8 +9,9 @@ const Layout = (props) => {
     const { setUserContext, setFormContext } = useContext(UserCxt);
 
     const submitLogin = async () => {
+        console.log("Loging in");
         const userAuth = await authorizeUser(input.username, input.password);
-        if (await userAuth.UserID) {
+        if (await userAuth?.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
             const authIds = await fetchAuthIdsForUser(userAuth.UserID);
