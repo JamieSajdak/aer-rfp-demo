@@ -87,18 +87,21 @@ const Header = () => {
                     max-width: 8rem;
                     width: 20vw;
                 }
-                .logout-icon {
-                    width: 2rem;
-                    height: 1.2rem;
-                    opacity: 0.5;
-                }
                 .logout {
+                    --bg: white;
+                    --fg: var(--cl-primary);
+                    border-color: var(--cl-primary);
                     margin-top: 0.5rem;
                     min-width: auto;
                     padding: 0.3rem 0.7rem 0.3rem 0.1rem;
                     display: flex;
                     align-items: center;
                     font-size: 0.8rem;
+                }
+                .logout-icon {
+                    width: 2rem;
+                    height: 1.2rem;
+                    opacity: 0.5;
                 }
             `}</style>
         </Aux>
