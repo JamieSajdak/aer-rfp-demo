@@ -11,7 +11,7 @@ import { UserCxt } from "../services/userContext";
 import { postNewRecord } from "../services/queryApi";
 
 const Submit = (props) => {
-    const { userContext } = useContext(UserCxt);
+    const { userContext, formContext } = useContext(UserCxt);
 
     const formSubmit = async () => {
         const submit = await postNewRecord(input, userContext);
@@ -27,7 +27,7 @@ const Submit = (props) => {
         handleDateChange,
         handleSubmit,
         errors,
-        handleAutoPopulate,
+        handleAutoPopulate
     } = useForm(formSubmit, validateRecordSubmit);
 
     const [selectedFiles, setSelectedFiles] = useState([{}]);
@@ -39,18 +39,16 @@ const Submit = (props) => {
             fileReader.onload = function () {
                 console.log({
                     binary: fileReader.result,
-                    name: files[fileKey].name,
+                    name: files[fileKey].name
                 });
                 setSelectedFiles([
                     ...selectedFiles,
-                    { binary: fileReader.result, name: files[fileKey].name },
+                    { binary: fileReader.result, name: files[fileKey].name }
                 ]);
             };
             fileReader.readAsBinaryString(files[fileKey]);
         });
     };
-
-    const selecOptionsTemp = ["1", "2", "3", "4"];
 
     return (
         <Aux>
@@ -69,7 +67,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             change={handleChange}
-                            options={selecOptionsTemp}
+                            options={formContext.authOptions}
                             placeholder="Select Authoirization number"
                         />
                         <InputTextField
