@@ -4,7 +4,8 @@ import { UserCxt } from "../services/userContext";
 import {
     fetchAdminRecords,
     fetchIndustryRecords,
-    fetchRecordsByWellID
+    fetchRecordsByWellID,
+    putRecord
 } from "../services/queryApi";
 
 import SelectField from "../components/SelectField";
@@ -50,14 +51,16 @@ const Review = (props) => {
         setSelectedHeaderIndex(index);
     };
 
-    const handleSubmit = (decision) => {
+    const handleSubmit = async (decision) => {
         alert("Project is: " + decision);
+        const put = await putRecord(selectedProject, decision);
+        console.log(put);
         setSelectedProject();
+        fetchRecords();
     };
 
     const handleSearchByWellID = async (event) => {
         const value = event.target.value;
-        console.log(value);
         setInput(value);
         const recordsByWellID = await fetchRecordsByWellID(
             userContext?.UserID,
@@ -100,7 +103,6 @@ const Review = (props) => {
             isForIndustry: true
         }
     ].filter((column) => {
-        console.log("filtering");
         return userContext?.Role === USER_ROLE_AER
             ? true
             : column.isForIndustry;

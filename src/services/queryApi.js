@@ -78,7 +78,7 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
         Amount: record.amount,
         Status: "Submitted",
         FileName: null,
-        LocalFilePath: null,
+        LocalFilePath: null
     };
 
     try {
@@ -86,5 +86,24 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
         return post;
     } catch (e) {
         return { error: "Could post record" };
+    }
+};
+
+export const putRecord = async (record, decision) => {
+    const url = BASE_URL + "/api/Industry";
+
+    const updatedRecord = {
+        ...record,
+        Status: decision
+    };
+
+    console.log(updatedRecord);
+
+    try {
+        const put = await axios.put(url, updatedRecord);
+        return put;
+    } catch (e) {
+        console.log(e);
+        return { error: e };
     }
 };
