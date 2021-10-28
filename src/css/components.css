@@ -1,8 +1,7 @@
-
 .input {
     display: flex;
     flex-direction: column;
-    width:100%;
+    width: 100%;
     justify-content: center;
     position: relative;
 }
@@ -11,7 +10,7 @@
     margin-bottom: 0.2rem;
     color: var(--font-primary-color);
     text-transform: capitalize;
-    width:100%;
+    width: 100%;
 }
 
 .input-field {
@@ -42,12 +41,12 @@
 .button {
     padding: 0.8rem 2.5rem;
     border-radius: 10000px;
-    border: 2px solid var(--fg);
+    border: 2px solid var(--bg);
     color: var(--fg);
     background-color: var(--bg);
     text-align: center;
     cursor: pointer;
-    filter: drop-shadow(4px 4px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.2));
     font-weight: 600;
     transition: all 0.2s;
     min-width: 10rem;
@@ -59,20 +58,26 @@
     color: var(--bg);
 }
 
+.button--sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    min-width: 6rem;
+}
+
 .button--file:hover {
     background-color: white;
     color: var(--cl-primary);
 }
 
 .divider {
-    width:100%;
+    width: 100%;
     height: 2px;
     background-color: var(--cl-primary);
 }
 
 .button--file {
     background-color: var(--cl-primary);
-    color:white;
+    color: white;
     border-color: var(--cl-primary);
 }
 .button--status {
@@ -82,7 +87,7 @@
     padding: 0.5rem 1rem;
 }
 .button--status:hover {
-    color:white;
+    color: white;
     background-color: var(--cl-submitted);
 }
 
@@ -111,7 +116,7 @@ thead {
     padding: 0;
     margin-left: 0.5rem;
     border-radius: 50%;
-    background-image: url('./downarrow.svg');
+    background-image: url("./downarrow.svg");
     background-size: 70%;
     background-repeat: no-repeat;
     background-position: center;
@@ -120,12 +125,11 @@ thead {
     cursor: pointer;
 }
 .table-header-button:hover {
-    filter:brightness(1.3);
+    filter: brightness(1.3);
 }
 .table-header-button--selected {
-    filter:brightness(1.5);
+    filter: brightness(1.5);
 }
-
 
 tbody {
     background-color: white;
@@ -141,6 +145,6 @@ td {
     margin: 0;
 }
 
-tr  {
+tr {
     border-top: 1px solid var(--cl-light-grey);
 }

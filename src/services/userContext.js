@@ -1,5 +1,3 @@
 import { createContext } from "react";
 
-export const UserCxt = createContext({
-    userContext: {}
-});
+export const UserCxt = createContext();

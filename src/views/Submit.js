@@ -1,51 +1,68 @@
 import React, { useState, useContext } from "react";
 import useForm from "../lib/useForm/useForm";
-import Aux from '../hoc/Auxillary';
+import Aux from "../hoc/Auxillary";
 
-import { validateRecordSubmit } from '../lib/useForm/formValidation';
+import { validateRecordSubmit } from "../lib/useForm/formValidation";
 import InputTextField from "../components/InputTextField";
 import InputFile from "../components/InputFile";
 import SelectField from "../components/SelectField";
 import InputDate from "../components/InputDate";
-import  { UserCxt } from '../services/userContext'
+import { UserCxt } from "../services/userContext";
+import { postNewRecord } from "../services/queryApi";
 
 const Submit = (props) => {
     const { userContext } = useContext(UserCxt);
 
-    const formSubmit = () => {
-        alert('form submitted: ')
-        setInput({})
-        setSelectedFiles([])
-    }
+    const formSubmit = async () => {
+        const submit = await postNewRecord(input, userContext);
+        alert("form submitted: ", await submit);
+        setInput({});
+        setSelectedFiles([]);
+    };
 
-    const { input, setInput, handleChange, handleDateChange, handleSubmit, errors, handleAutoPopulate} = useForm(
-        formSubmit,
-        validateRecordSubmit
-    )
-   
-    const [selectedFiles, setSelectedFiles] = useState([{}])
+    const {
+        input,
+        setInput,
+        handleChange,
+        handleDateChange,
+        handleSubmit,
+        errors,
+        handleAutoPopulate,
+    } = useForm(formSubmit, validateRecordSubmit);
+
+    const [selectedFiles, setSelectedFiles] = useState([{}]);
 
     const handleFileUpload = (files) => {
-        console.log(files)
-        Object.keys(files).forEach(fileKey => {
-            const fileReader = new FileReader()
-            fileReader.onload = function() {
-                console.log({binary: fileReader.result, name: files[fileKey].name})
-                setSelectedFiles([...selectedFiles, {binary: fileReader.result, name: files[fileKey].name}])
-            }
-            fileReader.readAsBinaryString(files[fileKey])
-        })
-    }
+        console.log(files);
+        Object.keys(files).forEach((fileKey) => {
+            const fileReader = new FileReader();
+            fileReader.onload = function () {
+                console.log({
+                    binary: fileReader.result,
+                    name: files[fileKey].name,
+                });
+                setSelectedFiles([
+                    ...selectedFiles,
+                    { binary: fileReader.result, name: files[fileKey].name },
+                ]);
+            };
+            fileReader.readAsBinaryString(files[fileKey]);
+        });
+    };
 
-    const selecOptionsTemp = ["option1", "option2", "option3", "option4"]
+    const selecOptionsTemp = ["1", "2", "3", "4"];
 
     return (
         <Aux>
             <div className="container">
                 <h1>Record Submission</h1>
-                <div className="divider"/>
+                <div className="divider" />
                 <div className="container--inner flow">
-                    <form className="form" id="record-submission" onSubmit={handleSubmit}>
+                    <form
+                        className="form"
+                        id="record-submission"
+                        onSubmit={handleSubmit}
+                    >
                         <SelectField
                             for="authorization_num"
                             label="Authorization Number"
@@ -55,7 +72,7 @@ const Submit = (props) => {
                             options={selecOptionsTemp}
                             placeholder="Select Authoirization number"
                         />
-                        <InputTextField 
+                        <InputTextField
                             for="well_id"
                             label="Well ID"
                             errors={errors}
@@ -72,7 +89,7 @@ const Submit = (props) => {
                             type="text"
                             change={handleDateChange}
                         />
-                        <InputTextField 
+                        <InputTextField
                             for="industry_name"
                             label="Industry Name"
                             errors={errors}
@@ -89,7 +106,7 @@ const Submit = (props) => {
                             change={handleChange}
                             placeholder="Select Industry Type"
                         />
-                        <InputTextField 
+                        <InputTextField
                             for="amount"
                             errors={errors}
                             input={input}
@@ -97,46 +114,55 @@ const Submit = (props) => {
                             change={handleChange}
                             placeholder="Enter Well ID"
                         />
-                        <InputFile 
+                        <InputFile
                             for="auto"
                             label="Auto Populate"
                             input={input}
                             type="file"
-                            change={file => handleAutoPopulate(file)}
+                            change={(file) => handleAutoPopulate(file)}
                         />
-                        <InputFile 
+                        <InputFile
                             for="file"
                             label="Supported Documentation"
                             errors={errors}
                             input={input}
                             type="file"
-                            change={files => handleFileUpload(files)}
+                            change={(files) => handleFileUpload(files)}
                         />
                     </form>
                     <div>
                         <h2>Documentation Added</h2>
-                        <div className="divider"/>
-                        {selectedFiles.map(file => <p>{file?.name}</p>)}
+                        <div className="divider" />
+                        {selectedFiles.map((file) => (
+                            <p>{file?.name}</p>
+                        ))}
                     </div>
-                    <button className="button bg--secondary form-button" form="record-submission">Submit</button>
+                    <button
+                        className="button bg--secondary form-button"
+                        form="record-submission"
+                    >
+                        Submit
+                    </button>
                 </div>
             </div>
             <style jsx>{`
                 .form-button {
-                    display:block;
+                    display: block;
                     margin-left: auto;
                 }
                 .form {
                     margin-top: 1rem;
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    grid-template-columns: repeat(
+                        auto-fill,
+                        minmax(300px, 1fr)
+                    );
                     row-gap: 0.6rem;
                     column-gap: 3rem;
                 }
-
             `}</style>
         </Aux>
-    )
-}
+    );
+};
 
-export default Submit
+export default Submit;

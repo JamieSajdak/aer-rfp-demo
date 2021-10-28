@@ -1,18 +1,26 @@
 import React, { useContext } from "react";
-import Aux from '../hoc/Auxillary';
-import { NavLink } from 'react-router-dom';
-import { UserCxt } from '../services/userContext';
+import Aux from "../hoc/Auxillary";
+import { NavLink } from "react-router-dom";
+import { UserCxt } from "../services/userContext";
 
 const Header = () => {
-    const { userContext, setUserContext } = useContext(UserCxt);
+    const { setUserContext } = useContext(UserCxt);
 
     return (
         <Aux>
-             <div className="header">
+            <div className="header">
                 <div className="container space">
-                    <img src={"/images/AER_Logo.png"} alt="Alberta Energy Regulator" className="header-logo"/>
+                    <img
+                        src={"/images/AER_Logo.png"}
+                        alt="Alberta Energy Regulator"
+                        className="header-logo"
+                    />
                     <div className="nav-container">
-                        <img src={"/images/logo-onestop.png"} alt="one stop" className="onestop"/>
+                        <img
+                            src={"/images/logo-onestop.png"}
+                            alt="one stop"
+                            className="onestop"
+                        />
                         <nav className="space nav">
                             <NavLink
                                 to="/"
@@ -30,8 +38,15 @@ const Header = () => {
                             >
                                 Submit Record
                             </NavLink>
-                            <button className="nav-link logout button bg--primary" onClick={() =>setUserContext({})}>
-                                <img src={"/images/user_icon.svg"} className="logout-icon" alt="logout"/>
+                            <button
+                                className="nav-link logout button bg--primary"
+                                onClick={() => setUserContext({})}
+                            >
+                                <img
+                                    src={"/images/user_icon.svg"}
+                                    className="logout-icon"
+                                    alt="logout"
+                                />
                                 Logout
                             </button>
                         </nav>
@@ -45,10 +60,10 @@ const Header = () => {
                     padding: 1rem 0;
                 }
                 .header-logo {
-                    height:4.5rem;
+                    height: 4.5rem;
                 }
                 .nav {
-                    align-items:end;
+                    align-items: end;
                 }
                 .nav-link {
                     text-decoration: none;
@@ -72,23 +87,25 @@ const Header = () => {
                     max-width: 8rem;
                     width: 20vw;
                 }
-                .logout-icon {
-                    width:2rem;
-                    height:1.2rem;
-                    opacity: 0.5;
-                }
                 .logout {
+                    --bg: white;
+                    --fg: var(--cl-primary);
+                    border-color: var(--cl-primary);
                     margin-top: 0.5rem;
-                    min-width:auto;
+                    min-width: auto;
                     padding: 0.3rem 0.7rem 0.3rem 0.1rem;
                     display: flex;
                     align-items: center;
                     font-size: 0.8rem;
                 }
+                .logout-icon {
+                    width: 2rem;
+                    height: 1.2rem;
+                    opacity: 0.5;
+                }
             `}</style>
         </Aux>
-       
-    )
-}
+    );
+};
 
-export default Header
+export default Header;

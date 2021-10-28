@@ -1,79 +1,89 @@
-@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Alata&display=swap");
 
 :root {
-  /*COLORS*/
-  --cl-primary: #0a5688;
-  --cl-light-grey: #eee;
-  --cl-dark-grey: rgb(145, 145, 145);
-  --cl-light-green: #74AA50;
-  --cl-submitted: #CFA516;
-  --cl-danger: rgb(165, 18, 18);
-  /*FONTS*/
-  --font-header-main: 'Alata', sans-serif;
-  /*UTILITY*/
-  --ut-shadow: drop-shadow(4px 4px 4px rgba(0,0,0,0.2));
+    /*COLORS*/
+    --cl-primary: #0a5688;
+    --cl-light-grey: #eee;
+    --cl-dark-grey: rgb(145, 145, 145);
+    --cl-light-green: #74aa50;
+    --cl-submitted: #cfa516;
+    --cl-danger: rgb(143, 27, 27);
+    /*FONTS*/
+    --font-header-main: "Alata", sans-serif;
+    /*UTILITY*/
+    --ut-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.2));
 }
 
 .shadow {
-  filter: var(--ut-shadow)
+    filter: var(--ut-shadow);
 }
 
 .bg--primary {
-  --fg: var(--cl-primary);
-  --bg:white;
+    --bg: var(--cl-primary);
+    --fg: white;
 }
 .bg--submitted {
-  --fg: var(--cl-light-green);
-  --bg:white;
+    --bg: var(--cl-light-green);
+    --fg: white;
 }
 .bg--secondary {
-  --fg: var(--cl-light-green);
-  --bg: white;
+    --bg: var(--cl-light-green);
+    --fg: white;
 }
 .bg--danger {
-  --fg: var(--cl-danger);
-  --bg: white;
+    --bg: var(--cl-danger);
+    --fg: white;
 }
 
 .App {
-  margin: 0;
-  padding: 0 0 4rem 0;
-  position: relative;
-  background-image: url('./AER_Background.svg');
-  background-size: 60%;
-  background-position: 100% 100%;
-  background-repeat: no-repeat;
-  background-color: #e1e1e1;
-  min-height: 100vh;
-  min-width: 100vw;
+    margin: 0;
+    padding: 0 0 4rem 0;
+    position: relative;
+    background-image: url("./AER_Background.svg");
+    background-size: 60%;
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: #e1e1e1;
+    min-height: 100vh;
+    min-width: 100vw;
 }
 
 .layout-contianer {
-  width:90%;
-  max-width: 900px;
+    width: 90%;
+    max-width: 900px;
 }
 
-
-h1, h2, h3, h4, h5, p {
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+    margin: 0;
 }
 
-h1, h2, h3, .h1, .h2, .h3  {
-  font-family: var(--font-header-main);
-  font-weight: 500;
-  color: black;
-  font-size: 1.5rem;
-  text-transform: capitalize;
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+    font-family: var(--font-header-main);
+    font-weight: 500;
+    color: black;
+    font-size: 1.5rem;
+    text-transform: capitalize;
 }
 
-h2, .h2 {
-  font-size: 1.3rem;
+h2,
+.h2 {
+    font-size: 1.3rem;
 }
-h3, .h3 {
-  font-size: 1rem;
+h3,
+.h3 {
+    font-size: 1rem;
 }
 
 select {
-  font-size: 14px;
+    font-size: 14px;
 }
