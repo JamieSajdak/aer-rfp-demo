@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import Aux from "../hoc/Auxillary";
-import { UserCxt } from "../services/userContext";
+import Aux from "../../hoc/Auxillary";
+import { UserCxt } from "../../services/userContext";
 import {
     fetchAdminRecords,
     fetchIndustryRecords,
-    fetchRecordsByWellID,
+    fetchRecordsByAuthID,
     putRecord
-} from "../services/queryApi";
+} from "../../services/queryApi";
 
-import SelectField from "../components/SelectField";
+import SelectField from "../../components/SelectField";
+import dayjs from "dayjs";
 
 const Review = (props) => {
     const USER_ROLE_AER = "AER";
 
-    const { userContext } = useContext(UserCxt);
+    const { userContext, formContext } = useContext(UserCxt);
     const [records, setRecords] = useState([]);
     const [isAsc, setIsAsc] = useState(true);
     const [selectedHeaderIndex, setSelectedHeaderIndex] = useState();
@@ -21,17 +22,20 @@ const Review = (props) => {
     const [input, setInput] = useState("");
 
     const isUserAer = userContext.Role === USER_ROLE_AER;
-    const selecOptionsTemp = ["1", "2", "3", "4"];
 
     useEffect(() => {
+        console.log(formContext);
         fetchRecords();
     }, []);
 
     const fetchRecords = async () => {
         if (userContext?.Role === USER_ROLE_AER) {
             const data = await fetchAdminRecords();
-            console.log(data);
-            setRecords(await data);
+            if (!data?.error) {
+                setRecords(await data);
+            } else {
+                setRecords([data]);
+            }
         } else {
             const data = await fetchIndustryRecords(userContext.UserID);
             setRecords(await data);
@@ -53,7 +57,11 @@ const Review = (props) => {
 
     const handleSubmit = async (decision) => {
         alert("Project is: " + decision);
-        const put = await putRecord(selectedProject, decision);
+        const put = await putRecord(
+            selectedProject,
+            decision,
+            userContext.UserID
+        );
         console.log(put);
         setSelectedProject();
         fetchRecords();
@@ -62,10 +70,11 @@ const Review = (props) => {
     const handleSearchByWellID = async (event) => {
         const value = event.target.value;
         setInput(value);
-        const recordsByWellID = await fetchRecordsByWellID(
+        const recordsByWellID = await fetchRecordsByAuthID(
             userContext?.UserID,
             value
         );
+        setSelectedProject();
         setRecords(await recordsByWellID);
     };
 
@@ -89,7 +98,7 @@ const Review = (props) => {
             isForIndustry: true
         },
         { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
-        { for: "Risk", click: handleSort, id: "risk", isForIndustry: true },
+        { for: "Risk", click: handleSort, id: "Risk", isForIndustry: true },
         {
             for: "Date",
             click: handleSort,
@@ -116,22 +125,44 @@ const Review = (props) => {
         }
     };
 
+    const ifDateFormat = (record, column) => {
+        if (
+            column === "SubmittedDate" ||
+            (column === "ApprovedDate" && record[column])
+        ) {
+            const date = new dayjs(record[column]);
+            return date.format("DD-MMM-YYYY").toUpperCase();
+        }
+        return record[column];
+    };
+
     return (
         <Aux>
             <div className="container">
                 <h1>{userContext?.Role} Review</h1>
                 <div className="flow">
                     <div className="divider" />
-                    <SelectField
-                        for="authorization_num"
-                        label="Authorization Number"
-                        input={{ authorization_num: input }}
-                        errors={{}}
-                        change={handleSearchByWellID}
-                        options={selecOptionsTemp}
-                        placeholder="Select Authoirization number"
-                    />
-                    <button onClick={fetchRecords}>Cancel</button>
+                    <div className="auth-container">
+                        <SelectField
+                            for="authorization_num"
+                            label="Authorization Number"
+                            input={{ authorization_num: input }}
+                            errors={{}}
+                            change={handleSearchByWellID}
+                            options={formContext.authOptions}
+                            placeholder="Select Authoirization number"
+                        >
+                            <button onClick={fetchRecords} className="cancel">
+                                <img
+                                    src={"/images/refrechIcon.svg"}
+                                    alt="refresh"
+                                ></img>
+                            </button>
+                        </SelectField>
+                    </div>
+                    {records[0]?.error ? (
+                        <p>Error connecting to the server</p>
+                    ) : null}
                     <table>
                         <thead>
                             {industryTableHeaders.map((header, index) => {
@@ -187,11 +218,10 @@ const Review = (props) => {
                                                                   ]
                                                               ].join(" ")}
                                                           >
-                                                              {
-                                                                  record[
-                                                                      column.id
-                                                                  ]
-                                                              }
+                                                              {ifDateFormat(
+                                                                  record,
+                                                                  column.id
+                                                              )}
                                                           </td>
                                                       );
                                                   }
@@ -204,7 +234,29 @@ const Review = (props) => {
                     <div className="space">
                         {selectedProject ? (
                             <div className="selected-project shadow">
-                                <h2>Project Details</h2>
+                                <div className="selected-project-header space">
+                                    <h2>Project Details</h2>
+                                    {selectedProject?.Status === "Submitted" ? (
+                                        <Aux>
+                                            <button
+                                                className="button button--sm bg--secondary"
+                                                onClick={() =>
+                                                    handleSubmit("Approved")
+                                                }
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                className="button button--sm bg--danger"
+                                                onClick={() =>
+                                                    handleSubmit("Denied")
+                                                }
+                                            >
+                                                Deny
+                                            </button>
+                                        </Aux>
+                                    ) : null}
+                                </div>
                                 <div className="selected-project-details">
                                     {Object.keys(selectedProject).map((key) => {
                                         return (
@@ -213,29 +265,16 @@ const Review = (props) => {
                                                     <span className="h3">
                                                         {key.replace("_", " ")}:{" "}
                                                     </span>
-                                                    {selectedProject[key]}
+                                                    {ifDateFormat(
+                                                        selectedProject,
+                                                        key
+                                                    )}
                                                 </p>
                                             </div>
                                         );
                                     })}
                                 </div>
                             </div>
-                        ) : null}
-                        {selectedProject?.Status === "Submitted" ? (
-                            <Aux>
-                                <button
-                                    className="button bg--secondary"
-                                    onClick={() => handleSubmit("Approved")}
-                                >
-                                    Approve
-                                </button>
-                                <button
-                                    className="button bg--danger"
-                                    onClick={() => handleSubmit("Denied")}
-                                >
-                                    Deny
-                                </button>
-                            </Aux>
                         ) : null}
                     </div>
                 </div>
@@ -250,14 +289,20 @@ const Review = (props) => {
                 }
                 .selected-project {
                     width: 100%;
-                    max-width: 35rem;
+
                     background-color: white;
                     margin-right: auto;
                 }
-                .selected-project h2 {
+                .selected-project-header {
                     padding: 0.5rem 1rem;
                     background-color: var(--cl-primary);
                     color: white;
+                    display: flex;
+                    align-items: center;
+                }
+                .selected-project-header h2 {
+                    color: white;
+                    margin-right: auto;
                 }
                 .selected-project-details {
                     text-transform: capitalize;
@@ -299,6 +344,15 @@ const Review = (props) => {
                 }
                 .row--selected {
                     background-color: #eee;
+                }
+                .auth-container {
+                    max-width: 30rem;
+                }
+                .cancel {
+                    background-color: var(--cl-primary);
+                    border: none;
+                    color: white;
+                    width: 3rem;
                 }
             `}</style>
         </Aux>

@@ -15,46 +15,64 @@ export const authorizeUser = async (userID, password) => {
         return userData[0];
     } catch (e) {
         console.log(e);
-        return { error: "Could not fetch user Auth" };
+        return { error: e };
     }
 };
 
 export const fetchIndustryRecords = async (userID) => {
     const url = BASE_URL + `/api/Industry/GetRecordsByUserID/${userID}`;
-    console.log(url);
-    try {
-        const industryResults = await axios.get(url);
-        const data = await industryResults.data;
-        console.log(data);
-        return data;
-    } catch (e) {
-        console.log(e);
-        return { error: "Could not fetch Insutry Record results" };
-    }
+    return fetchRecords(url);
 };
 
-export const fetchRecordsByWellID = async (userID, wellID) => {
+export const fetchRecordsByAuthID = async (userID, wellID) => {
     const url =
-        BASE_URL + `/api/Industry/GetRecordsByWellID/${userID},${wellID}`;
-    try {
-        const industryResults = await axios.get(url);
-        const industryData = await industryResults.data;
-        return industryData;
-    } catch (e) {
-        console.log(e);
-        return { error: "Could not fetch WellId Record results" };
-    }
+        BASE_URL +
+        `/api/Industry/GetRecordsByAuthorizationID/${userID},${wellID}`;
+    return fetchRecords(url);
 };
 
 export const fetchAdminRecords = async () => {
     const url = PROXY + BASE_URL + `/api/Industry/GetRecordsForAERUser`;
+    return fetchRecords(url);
+};
 
+const fetchRecords = async (url) => {
     try {
-        const industryResults = await axios.get(url);
-        return await industryResults.data;
+        const records = await axios.get(url);
+        let data = records.data;
+        data = data.map((record) => {
+            delete record._rid;
+            delete record._etag;
+            delete record._self;
+            delete record._attachments;
+            delete record._ts;
+            delete record.LocalFilePath;
+            return {
+                ...record,
+                Risk:
+                    record?.Amount > 100
+                        ? "High"
+                        : record?.Amount > 50
+                        ? "Medium"
+                        : "Low"
+            };
+        });
+        console.log(data);
+        return data;
     } catch (e) {
         console.log(e);
-        return { error: "Could not fetch Admin Record results" };
+        return { error: e };
+    }
+};
+
+export const fetchAuthIdsForUser = async (userID) => {
+    const url = BASE_URL + `/api/Industry/GetAuthorizationByUserID/${userID}`;
+    try {
+        const authIds = await axios.get(url);
+        return await authIds.data;
+    } catch (e) {
+        console.log(e);
+        return { error: e };
     }
 };
 
@@ -89,12 +107,14 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
     }
 };
 
-export const putRecord = async (record, decision) => {
+export const putRecord = async (record, decision, userID) => {
     const url = BASE_URL + "/api/Industry";
 
     const updatedRecord = {
         ...record,
-        Status: decision
+        Status: decision,
+        ApprovedDate: new dayjs().format("YYYY-MM-DD"),
+        ApprovedBy: userID
     };
 
     console.log(updatedRecord);

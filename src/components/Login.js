@@ -3,17 +3,28 @@ import InputTextField from "./InputTextField";
 import useForm from "../lib/useForm/useForm";
 import { validateLogin } from "../lib/useForm/formValidation";
 import { UserCxt } from "../services/userContext";
-import { authorizeUser } from "../services/queryApi";
+import { authorizeUser, fetchAuthIdsForUser } from "../services/queryApi";
 
 const Layout = (props) => {
-    const { setUserContext } = useContext(UserCxt);
+    const { setUserContext, setFormContext } = useContext(UserCxt);
 
     const submitLogin = async () => {
         const userAuth = await authorizeUser(input.username, input.password);
-        console.log(userAuth);
-        if (userAuth?.id) {
+        if (await userAuth.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
+            const authIds = await fetchAuthIdsForUser(userAuth.UserID);
+            const authIdLength = await authIds.length;
+            console.log(await authIds);
+            if (authIdLength > 0) {
+                setFormContext({
+                    authOptions: [
+                        ...(await authIds.map(
+                            (authId) => authId.authorizationID
+                        ))
+                    ]
+                });
+            }
         } else {
             const errorString = "- error connecting to server";
             setInput({});
@@ -57,9 +68,7 @@ const Layout = (props) => {
                             errors={errors}
                         />
                     </div>
-                    <button className="button button--submit bg--secondary">
-                        Submit
-                    </button>
+                    <button className="button button--submit bg--secondary"></button>
                 </form>
             </div>
             <style jsx>{`

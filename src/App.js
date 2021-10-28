@@ -8,13 +8,13 @@ import { Switch, Route } from "react-router-dom";
 
 import Login from "./components/Login";
 import Header from "./components/Header";
-import Review from "./views/Review";
+import Review from "./views/Review/Review";
 import Submit from "./views/Submit";
 import { UserCxt } from "./services/userContext";
 
 function App() {
     const [userContext, setUserContext] = useState({});
-    const [formContext, setFormContext] = useState({});
+    const [formContext, setFormContext] = useState({ authOptions: [] });
 
     useEffect(() => {}, []);
     return (
