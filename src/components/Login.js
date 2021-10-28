@@ -16,9 +16,7 @@ const Layout = (props) => {
         if (await userAuth?.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
-            console.log(userAuth);
             const authIds = await fetchAuthIdsForUser(userAuth);
-            console.log(await authIds);
             if ((await authIds.length) > 0) {
                 setFormContext({
                     authOptions: authIds
