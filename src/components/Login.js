@@ -1,32 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import InputTextField from "./InputTextField";
 import useForm from "../lib/useForm/useForm";
 import { validateLogin } from "../lib/useForm/formValidation";
 import { UserCxt } from "../services/userContext";
 import { authorizeUser, fetchAuthIdsForUser } from "../services/queryApi";
+import Spinner from "./Spiner";
 
 const Layout = (props) => {
     const { setUserContext, setFormContext } = useContext(UserCxt);
+    const [isLoading, setIsLoading] = useState(false);
 
     const submitLogin = async () => {
-        console.log("Loging in");
+        setIsLoading(true);
         const userAuth = await authorizeUser(input.username, input.password);
         if (await userAuth?.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
-            const authIds = await fetchAuthIdsForUser(userAuth.UserID);
-            const authIdLength = await authIds.length;
+            console.log(userAuth);
+            const authIds = await fetchAuthIdsForUser(userAuth);
             console.log(await authIds);
-            if (authIdLength > 0) {
+            if ((await authIds.length) > 0) {
                 setFormContext({
-                    authOptions: [
-                        ...(await authIds.map(
-                            (authId) => authId.authorizationID
-                        ))
-                    ]
+                    authOptions: authIds
                 });
             }
         } else {
+            setIsLoading(false);
             const errorString = "- error connecting to server";
             setInput({});
             setErrors({ username: errorString, password: errorString });
@@ -69,9 +68,15 @@ const Layout = (props) => {
                             errors={errors}
                         />
                     </div>
-                    <button className="button button--submit bg--secondary">
-                        Login
-                    </button>
+                    {isLoading ? (
+                        <div className="button button--submit bg--secondary button--loading">
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <button className="button button--submit bg--secondary">
+                            Login
+                        </button>
+                    )}
                 </form>
             </div>
             <style jsx>{`

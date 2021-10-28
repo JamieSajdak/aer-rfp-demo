@@ -33,7 +33,6 @@ const Submit = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([{}]);
 
     const handleFileUpload = (files) => {
-        console.log(files);
         Object.keys(files).forEach((fileKey) => {
             const fileReader = new FileReader();
             fileReader.onload = function () {

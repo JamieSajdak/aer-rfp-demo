@@ -24,11 +24,12 @@ export const fetchIndustryRecords = async (userID) => {
     return fetchRecords(url);
 };
 
-export const fetchRecordsByAuthID = async (userID, wellID) => {
+export const fetchRecordsByAuthID = async (userID, Role, AuthID) => {
     const url =
         BASE_URL +
-        `/api/Industry/GetRecordsByAuthorizationID/${userID},${wellID}`;
-    return fetchRecords(url);
+        `/api/Industry/GetRecordsByAuthorizationID/${userID},${Role},${AuthID}`;
+
+    return await fetchRecords(url);
 };
 
 export const fetchAdminRecords = async () => {
@@ -57,7 +58,6 @@ const fetchRecords = async (url) => {
                         : "Low"
             };
         });
-        console.log(data);
         return data;
     } catch (e) {
         console.log(e);
@@ -65,11 +65,11 @@ const fetchRecords = async (url) => {
     }
 };
 
-export const fetchAuthIdsForUser = async (userID) => {
-    const url = BASE_URL + `/api/Industry/GetAuthorizationByUserID/${userID}`;
+export const fetchAuthIdsForUser = async ({ UserID }) => {
+    const url = BASE_URL + `/api/Industry/GetAuthorizationByUserID/${UserID}`;
     try {
         const authIds = await axios.get(url);
-        return await authIds.data;
+        return await authIds.data.map((obj) => obj.authorizationID);
     } catch (e) {
         console.log(e);
         return { error: e };
@@ -81,15 +81,15 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
         id: UserID + record.well_id,
-        UserID: "Steve",
+        UserID: UserID,
         WellID: record.well_id,
         AuthorizationID: "Auth4",
         IndustryType: record.industry_type,
-        SubmittedID: 0,
+        SubmittedID: record.SubmittedID + 1,
         SubmittedBy: UserID,
         SubmittedDate: date.format("YYYY-MM-DD"),
         IndustryName: record.industry_name,
-        ApprovedID: 0,
+        ApprovedID: record.ApprovedID + 1,
         ApprovedBy: null,
         ApprovedDate: "1900-01-01",
         Organization: Organization,

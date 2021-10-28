@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import Aux from "../../hoc/Auxillary";
+import dayjs from "dayjs";
+
 import { UserCxt } from "../../services/userContext";
 import {
     fetchAdminRecords,
@@ -9,7 +10,10 @@ import {
 } from "../../services/queryApi";
 
 import SelectField from "../../components/SelectField";
-import dayjs from "dayjs";
+
+import Aux from "../../hoc/Auxillary";
+import ReviewTable from "./ReviewTable";
+import Spinner from "../../components/Spiner";
 
 const Review = (props) => {
     const USER_ROLE_AER = "AER";
@@ -20,8 +24,7 @@ const Review = (props) => {
     const [selectedHeaderIndex, setSelectedHeaderIndex] = useState();
     const [selectedProject, setSelectedProject] = useState();
     const [input, setInput] = useState("");
-
-    const isUserAer = userContext.Role === USER_ROLE_AER;
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         console.log(formContext);
@@ -29,6 +32,7 @@ const Review = (props) => {
     }, []);
 
     const fetchRecords = async () => {
+        setIsLoading(true);
         if (userContext?.Role === USER_ROLE_AER) {
             const data = await fetchAdminRecords();
             if (!data?.error) {
@@ -40,16 +44,29 @@ const Review = (props) => {
             const data = await fetchIndustryRecords(userContext.UserID);
             setRecords(await data);
         }
+        setIsLoading(false);
         setInput("");
     };
 
     const handleSort = (event, index) => {
-        const sortedRecords = [...records].sort((a, b) => {
-            if (a[event.target.id] < b[event.target.id]) {
-                return isAsc ? -1 : 1;
-            }
-            return isAsc ? 1 : -1;
-        });
+        let sortedRecords = [...records];
+        if (event.target.id === "Risk") {
+            sortedRecords = [...records].sort((a, b) => {
+                if (a.Risk === "High") {
+                    return isAsc ? -1 : 1;
+                } else if (a.Risk === "Medium" && b.Risk === "Low") {
+                    return isAsc ? -1 : 1;
+                }
+                return isAsc ? 1 : -1;
+            });
+        } else {
+            sortedRecords = [...records].sort((a, b) => {
+                if (a[event.target.id] < b[event.target.id]) {
+                    return isAsc ? -1 : 1;
+                }
+                return isAsc ? 1 : -1;
+            });
+        }
         setRecords(sortedRecords);
         setIsAsc(!isAsc);
         setSelectedHeaderIndex(index);
@@ -62,7 +79,6 @@ const Review = (props) => {
             decision,
             userContext.UserID
         );
-        console.log(put);
         setSelectedProject();
         fetchRecords();
     };
@@ -72,57 +88,11 @@ const Review = (props) => {
         setInput(value);
         const recordsByWellID = await fetchRecordsByAuthID(
             userContext?.UserID,
+            userContext?.Role,
             value
         );
         setSelectedProject();
         setRecords(await recordsByWellID);
-    };
-
-    const industryTableHeaders = [
-        {
-            for: "Organization",
-            click: handleSort,
-            id: "Organization",
-            isForIndustry: true
-        },
-        {
-            for: "Auth Number",
-            click: handleSort,
-            id: "AuthorizationID",
-            isForIndustry: true
-        },
-        {
-            for: "Industry Type",
-            click: handleSort,
-            id: "IndustryType",
-            isForIndustry: true
-        },
-        { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
-        { for: "Risk", click: handleSort, id: "Risk", isForIndustry: true },
-        {
-            for: "Date",
-            click: handleSort,
-            id: "SubmittedDate",
-            isForIndustry: false
-        },
-        {
-            for: "Status",
-            click: handleSort,
-            id: "Status",
-            isForIndustry: true
-        }
-    ].filter((column) => {
-        return userContext?.Role === USER_ROLE_AER
-            ? true
-            : column.isForIndustry;
-    });
-
-    const selectProjectClick = (record) => {
-        if (selectedProject?.id === record.id) {
-            setSelectedProject();
-        } else {
-            setSelectedProject(record);
-        }
     };
 
     const ifDateFormat = (record, column) => {
@@ -134,6 +104,14 @@ const Review = (props) => {
             return date.format("DD-MMM-YYYY").toUpperCase();
         }
         return record[column];
+    };
+
+    const selectProjectClick = (record) => {
+        if (selectedProject?.id === record.id) {
+            setSelectedProject();
+        } else {
+            setSelectedProject(record);
+        }
     };
 
     return (
@@ -152,85 +130,37 @@ const Review = (props) => {
                             options={formContext.authOptions}
                             placeholder="Select Authoirization number"
                         >
-                            <button onClick={fetchRecords} className="cancel">
-                                <img
-                                    src={"/images/refrechIcon.svg"}
-                                    alt="refresh"
-                                ></img>
-                            </button>
+                            {isLoading ? (
+                                <div className="cancel">
+                                    <Spinner />
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={fetchRecords}
+                                    className="cancel"
+                                >
+                                    <img
+                                        src={"/images/refrechIcon.svg"}
+                                        alt="refresh"
+                                    ></img>
+                                </button>
+                            )}
                         </SelectField>
                     </div>
                     {records[0]?.error ? (
                         <p>Error connecting to the server</p>
                     ) : null}
-                    <table>
-                        <thead>
-                            {industryTableHeaders.map((header, index) => {
-                                return (
-                                    <TableHeaderCell
-                                        for={header.for}
-                                        id={header.id}
-                                        click={handleSort}
-                                        index={index}
-                                        selectedIndex={selectedHeaderIndex}
-                                    />
-                                );
-                            })}
-                        </thead>
-                        <tbody>
-                            {records?.error
-                                ? null
-                                : records.map((record, index) => {
-                                      return (
-                                          <tr
-                                              index={index}
-                                              className={
-                                                  record.id ===
-                                                  selectedProject?.id
-                                                      ? "row row--selected"
-                                                      : isUserAer
-                                                      ? "row"
-                                                      : ""
-                                              }
-                                              ariaRole={
-                                                  isUserAer ? "button" : ""
-                                              }
-                                              onClick={
-                                                  isUserAer
-                                                      ? () =>
-                                                            selectProjectClick(
-                                                                record
-                                                            )
-                                                      : null
-                                              }
-                                          >
-                                              {industryTableHeaders.map(
-                                                  (column, idx) => {
-                                                      return (
-                                                          <td
-                                                              className={[
-                                                                  column.id ===
-                                                                  "Status"
-                                                                      ? "table-status"
-                                                                      : "",
-                                                                  record[
-                                                                      column.id
-                                                                  ]
-                                                              ].join(" ")}
-                                                          >
-                                                              {ifDateFormat(
-                                                                  record,
-                                                                  column.id
-                                                              )}
-                                                          </td>
-                                                      );
-                                                  }
-                                              )}
-                                          </tr>
-                                      );
-                                  })}
-                        </tbody>
-                    </table>
+
+                    <ReviewTable
+                        handleSort={handleSort}
+                        selectedHeaderIndex={selectedHeaderIndex}
+                        records={records}
+                        selectedProject={selectedProject}
+                        selectProjectClick={selectProjectClick}
+                        ifDateFormat={ifDateFormat}
+                        userContext
+                    />
+
                     <div className="space">
                         {selectedProject ? (
                             <div className="selected-project shadow">
@@ -353,28 +283,10 @@ const Review = (props) => {
                     border: none;
                     color: white;
                     width: 3rem;
+                    padding: 0.2rem;
                 }
             `}</style>
         </Aux>
-    );
-};
-
-const TableHeaderCell = (props) => {
-    return (
-        <th>
-            <div className="table-header-container">
-                {props.for}
-                <button
-                    className={`table-header-button ${
-                        props.index === props.selectedIndex
-                            ? "table-header-button--selected"
-                            : ""
-                    }`}
-                    id={props.id}
-                    onClick={(event) => props.click(event, props.index)}
-                ></button>
-            </div>
-        </th>
     );
 };
 
