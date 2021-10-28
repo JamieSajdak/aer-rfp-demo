@@ -52,7 +52,6 @@ const Review = (props) => {
         let sortedRecords = [...records];
         if (event.target.id === "Risk") {
             sortedRecords = [...records].sort((a, b) => {
-                console.log(a, b);
                 if (a.Risk === "High") {
                     return isAsc ? -1 : 1;
                 } else if (a.Risk === "Medium" && b.Risk === "Low") {
