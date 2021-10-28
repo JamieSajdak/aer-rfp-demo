@@ -49,12 +49,25 @@ const Review = (props) => {
     };
 
     const handleSort = (event, index) => {
-        const sortedRecords = [...records].sort((a, b) => {
-            if (a[event.target.id] < b[event.target.id]) {
-                return isAsc ? -1 : 1;
-            }
-            return isAsc ? 1 : -1;
-        });
+        let sortedRecords = [...records];
+        if (event.target.id === "Risk") {
+            sortedRecords = [...records].sort((a, b) => {
+                console.log(a, b);
+                if (a.Risk === "High") {
+                    return isAsc ? -1 : 1;
+                } else if (a.Risk === "Medium" && b.Risk === "Low") {
+                    return isAsc ? -1 : 1;
+                }
+                return isAsc ? 1 : -1;
+            });
+        } else {
+            sortedRecords = [...records].sort((a, b) => {
+                if (a[event.target.id] < b[event.target.id]) {
+                    return isAsc ? -1 : 1;
+                }
+                return isAsc ? 1 : -1;
+            });
+        }
         setRecords(sortedRecords);
         setIsAsc(!isAsc);
         setSelectedHeaderIndex(index);
