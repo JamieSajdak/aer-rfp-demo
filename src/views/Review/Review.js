@@ -76,6 +76,7 @@ const Review = (props) => {
         setInput(value);
         const recordsByWellID = await fetchRecordsByAuthID(
             userContext?.UserID,
+            userContext?.Role,
             value
         );
         setSelectedProject();

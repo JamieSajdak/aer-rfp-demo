@@ -16,14 +16,12 @@ const Layout = (props) => {
         if (await userAuth?.UserID) {
             userAuth.auth = "success";
             setUserContext(userAuth);
-            const authIds = await fetchAuthIdsForUser(userAuth.UserID);
-            if (await authIds.UserID) {
+            console.log(userAuth);
+            const authIds = await fetchAuthIdsForUser(userAuth);
+            console.log(authIds);
+            if (authIds) {
                 setFormContext({
-                    authOptions: [
-                        ...(await authIds.map(
-                            (authId) => authId.authorizationID
-                        ))
-                    ]
+                    authOptions: authIds
                 });
             }
         } else {
