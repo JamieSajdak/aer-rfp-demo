@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { UserCxt } from "../services/userContext";
 import Modal from "./Modal";
 
-const Header = () => {
+const Header = (props) => {
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     return (
         <Aux>
@@ -131,7 +131,9 @@ const Nav = (props) => {
                 <button
                     className="nav-link logout button bg--primary"
                     onClick={() => {
-                        props.click();
+                        if (props.click) {
+                            props.click();
+                        }
                         setUserContext({});
                     }}
                 >
@@ -147,7 +149,6 @@ const Nav = (props) => {
                 .nav {
                     display: flex;
                     flex-direction: column;
-                    padding: 2rem;
                 }
                 .nav-link {
                     text-decoration: none;
