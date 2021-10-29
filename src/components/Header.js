@@ -60,7 +60,10 @@ const Header = () => {
                     padding: 1rem 0;
                 }
                 .header-logo {
-                    height: 4.5rem;
+                    height: auto;
+                    max-height: 4.5rem;
+                    max-width: 20vw;
+                    object-fit: contain;
                 }
                 .nav {
                     align-items: end;

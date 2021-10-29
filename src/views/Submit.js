@@ -158,7 +158,7 @@ const Submit = (props) => {
                             </button>
                         )}
                         <p className="error" aria-live="polite">
-                            * {error}
+                            {error ? `* ${error}` : null}
                         </p>
                     </div>
                 </div>
