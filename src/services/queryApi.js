@@ -80,7 +80,7 @@ export const fetchAuthIdsForUser = async ({ UserID }) => {
     }
 };
 
-const fetchMaxIdsForUser = (userID) => {
+const fetchMaxIdsForUser = async (userID) => {
     const url = BASE_URL + `/api/Industry/GetMaxIDyUserID/${userID}`;
     try {
         const authIds = await axios.get(url);
@@ -129,7 +129,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
 };
 
 export const putRecord = async (record, decision, userID) => {
-    const url = BASE_URL + "/api/Industry";
+    const url = BASE_URL + "/api/Industr";
 
     const updatedRecord = {
         ...record,
