@@ -57,81 +57,91 @@ const ReviewTable = ({
 
     return (
         <Aux>
-            <table>
-                <thead>
-                    <tr>
-                        {industryTableHeaders.map((header, index) => {
-                            return (
-                                <TableHeaderCell
-                                    key={index}
-                                    for={header.for}
-                                    id={header.id}
-                                    click={handleSort}
-                                    index={index}
-                                    selectedIndex={selectedHeaderIndex}
-                                />
-                            );
-                        })}
-                    </tr>
-                </thead>
-                <tbody>
-                    {isLoading ? (
+            <div className="twrap">
+                <table className="full">
+                    <thead>
                         <tr>
-                            <td
-                                colSpan={
-                                    Object.keys(industryTableHeaders).length
-                                }
-                            >
-                                <div className="table-loading">
-                                    <Spinner grey />
-                                </div>
-                            </td>
+                            {industryTableHeaders.map((header, index) => {
+                                return (
+                                    <TableHeaderCell
+                                        key={index}
+                                        for={header.for}
+                                        id={header.id}
+                                        click={handleSort}
+                                        index={index}
+                                        selectedIndex={selectedHeaderIndex}
+                                    />
+                                );
+                            })}
                         </tr>
-                    ) : records?.error ? null : (
-                        records.map((record, index) => {
-                            return (
-                                <tr
-                                    key={index}
-                                    index={index}
-                                    className={
-                                        record.id === selectedProject?.id
-                                            ? "row row--selected"
-                                            : isUserAer
-                                            ? "row"
-                                            : ""
-                                    }
-                                    role={isUserAer ? "button" : ""}
-                                    onClick={
-                                        isUserAer
-                                            ? () => selectProjectClick(record)
-                                            : null
+                    </thead>
+                    <tbody>
+                        {isLoading ? (
+                            <tr>
+                                <td
+                                    colSpan={
+                                        Object.keys(industryTableHeaders).length
                                     }
                                 >
-                                    {industryTableHeaders.map((column, idx) => {
-                                        return (
-                                            <td
-                                                key={idx}
-                                                className={[
-                                                    column.id === "Status"
-                                                        ? "table-status"
-                                                        : "",
-                                                    record[column.id]
-                                                ].join(" ")}
-                                            >
-                                                {ifDateFormat(
-                                                    record,
-                                                    column.id
-                                                )}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })
-                    )}
-                </tbody>
-            </table>
+                                    <div className="table-loading">
+                                        <Spinner grey />
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : records?.error ? null : (
+                            records.map((record, index) => {
+                                return (
+                                    <tr
+                                        key={index}
+                                        index={index}
+                                        className={
+                                            record.id === selectedProject?.id
+                                                ? "row row--selected"
+                                                : isUserAer
+                                                ? "row"
+                                                : ""
+                                        }
+                                        role={isUserAer ? "button" : ""}
+                                        onClick={
+                                            isUserAer
+                                                ? () =>
+                                                      selectProjectClick(record)
+                                                : null
+                                        }
+                                    >
+                                        {industryTableHeaders.map(
+                                            (column, idx) => {
+                                                return (
+                                                    <td
+                                                        key={idx}
+                                                        className={[
+                                                            column.id ===
+                                                            "Status"
+                                                                ? "table-status"
+                                                                : "",
+                                                            record[column.id]
+                                                        ].join(" ")}
+                                                    >
+                                                        {ifDateFormat(
+                                                            record,
+                                                            column.id
+                                                        )}
+                                                    </td>
+                                                );
+                                            }
+                                        )}
+                                    </tr>
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
+            </div>
             <style jsx>{`
+                .twrap {
+                    width: 100%;
+                    overflow-x: auto;
+                }
                 .table-loading {
                     height: 6rem;
                 }

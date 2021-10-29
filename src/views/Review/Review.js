@@ -81,7 +81,6 @@ const Review = (props) => {
                 decision,
                 userContext.UserID
             );
-            console.log(await put);
         } catch (e) {
             console.log(e);
         } finally {

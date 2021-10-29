@@ -32,5 +32,11 @@
     display: flex;
 }
 .space > * + * {
-    margin-left: 1rem;
+    margin: 1rem 0 0 0;
+}
+
+@media (min-width: 500px) {
+    .space > * + * {
+        margin: 0 0 0 1rem;
+    }
 }

@@ -12,7 +12,7 @@ const SelectField = (props) => {
                         {props?.errors[props.for]}
                     </span>
                 </label>
-                <div className="select-container space">
+                <div className="select-container">
                     <select
                         id={props.for}
                         name={props.for}
@@ -52,6 +52,9 @@ const SelectField = (props) => {
                 }
                 .select-container {
                     display: flex;
+                }
+                .select-container > * + * {
+                    margin-left: 1rem;
                 }
             `}</style>
         </Aux>

@@ -5,6 +5,7 @@ import { validateLogin } from "../lib/useForm/formValidation";
 import { UserCxt } from "../services/userContext";
 import { authorizeUser, fetchAuthIdsForUser } from "../services/queryApi";
 import Spinner from "./Spiner";
+import Modal from "./Modal";
 
 const Layout = (props) => {
     const { userContext, setUserContext, setFormContext } = useContext(UserCxt);
@@ -46,8 +47,7 @@ const Layout = (props) => {
 
     return (
         <div>
-            <div className="background"></div>
-            <div className="login-panel">
+            <Modal>
                 <form
                     className="login-container flow flow--between"
                     onSubmit={handleSubmit}
@@ -88,35 +88,8 @@ const Layout = (props) => {
                         </button>
                     )}
                 </form>
-            </div>
+            </Modal>
             <style jsx>{`
-                .background {
-                    z-index: 10;
-                    height: 100vh;
-                    background: radial-gradient(
-                        rgba(0, 0, 0, 0.1),
-                        rgba(0, 0, 0, 0.8)
-                    );
-                    position: fixed;
-                    top: 0;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    cursor: not-allowed;
-                }
-                .login-panel {
-                    z-index: 20;
-                    width: 90%;
-                    height: 90vh;
-                    max-width: 400px;
-                    max-height: 600px;
-                    background-color: white;
-                    position: fixed;
-                    top: 50%;
-                    right: 50%;
-                    transform: translate(50%, -50%);
-                    filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.2));
-                }
                 .login-container {
                     width: 70%;
                     margin: auto;
