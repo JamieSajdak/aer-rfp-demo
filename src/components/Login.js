@@ -11,25 +11,36 @@ const Layout = (props) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const submitLogin = async () => {
-        setIsLoading(true);
-        const userAuth = await authorizeUser(input.username, input.password);
-        if (await userAuth?.UserID) {
-            console.log(userAuth);
-            userAuth.auth = "success";
-            setUserContext((userContext) => ({ ...userContext, ...userAuth }));
-            const authIds = await fetchAuthIdsForUser(userAuth);
-            if ((await authIds.length) > 0) {
-                setFormContext({
-                    authOptions: authIds
+        try {
+            setIsLoading(true);
+            const userAuth = await authorizeUser(
+                input.username,
+                input.password
+            );
+            if (await !userAuth?.error) {
+                userAuth.auth = "success";
+                setUserContext((userContext) => ({
+                    ...userContext,
+                    ...userAuth
+                }));
+                const authIds = await fetchAuthIdsForUser(userAuth);
+                if ((await authIds.length) > 0) {
+                    setFormContext({
+                        authOptions: authIds
+                    });
+                }
+            } else {
+                setErrors({
+                    username: userAuth.error,
+                    password: userAuth.error
                 });
             }
-        } else {
+        } finally {
             setIsLoading(false);
-            const errorString = "- error connecting to server";
             setInput({});
-            setErrors({ username: errorString, password: errorString });
         }
     };
+
     const { input, setInput, handleChange, handleSubmit, errors, setErrors } =
         useForm(submitLogin, validateLogin);
 

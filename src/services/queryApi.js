@@ -10,10 +10,13 @@ export const authorizeUser = async (userID, password) => {
     try {
         const user = await axios.get(url);
         const userData = await user.data;
+        if ((await user.data.length) === 0) {
+            return { error: "- password or username incorrect" };
+        }
         return userData[0];
     } catch (e) {
         console.log(e);
-        return { error: e };
+        return { error: "- error connecting to server" };
     }
 };
 
