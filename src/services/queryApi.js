@@ -102,7 +102,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         id: UserID + ((await maxIds) + 1),
         UserID: UserID,
         WellID: record.well_id,
-        AuthorizationID: "Auth4",
+        AuthorizationID: record.authorization_num,
         IndustryType: record.industry_type,
         SubmittedID: (await maxIds) + 1,
         SubmittedBy: UserID,
@@ -116,7 +116,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         Status: "Submitted",
         Cntr: (await maxIds) + 1,
         FileName: fileName,
-        Base64Str: base64Str
+        Base64Str: btoa(base64Str)
     };
     console.log(newRecord);
     try {

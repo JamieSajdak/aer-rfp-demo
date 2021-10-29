@@ -18,9 +18,9 @@ const ReviewTable = ({
 
     const industryTableHeaders = [
         {
-            for: "Organization",
+            for: "Well ID",
             click: handleSort,
-            id: "Organization",
+            id: "WellID",
             isForIndustry: true
         },
         {
@@ -138,10 +138,6 @@ const ReviewTable = ({
                 </table>
             </div>
             <style jsx>{`
-                .twrap {
-                    width: 100%;
-                    overflow-x: auto;
-                }
                 .table-loading {
                     height: 6rem;
                 }
@@ -172,6 +168,12 @@ const ReviewTable = ({
                 }
                 .row--selected {
                     background-color: #eee;
+                }
+                @media (max-width: 500px) {
+                    .twrap {
+                        width: 100%;
+                        overflow-x: auto;
+                    }
                 }
             `}</style>
         </Aux>

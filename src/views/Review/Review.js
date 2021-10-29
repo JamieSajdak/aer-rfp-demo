@@ -74,17 +74,22 @@ const Review = (props) => {
     };
 
     const handleSubmit = async (decision) => {
+        const isSuccessfull = false;
         try {
-            setIsLoading(true);
             const put = await putRecord(
                 selectedProject,
                 decision,
                 userContext.UserID
             );
+            isSuccessfull = true;
         } catch (e) {
             console.log(e);
         } finally {
-            setIsLoading(false);
+            alert(
+                "Report " + decision + " " + isSuccessfull
+                    ? "Success"
+                    : "FAIL - server error"
+            );
             setSelectedProject();
             fetchRecords();
         }
