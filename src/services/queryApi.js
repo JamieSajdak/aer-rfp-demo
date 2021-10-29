@@ -80,47 +80,51 @@ export const fetchAuthIdsForUser = async ({ UserID }) => {
     }
 };
 
+const fetchMaxIdsForUser = (userID) => {
+    const url = BASE_URL + `/api/Industry/GetMaxIDyUserID/${userID}`;
+    try {
+        const authIds = await axios.get(url);
+        console.log(await authIds.data);
+        return await authIds.data;
+    } catch (e) {
+        console.log(e);
+        return { error: e };
+    }
+};
+
 export const postNewRecord = async (record, { UserID, Organization }, file) => {
+    const maxIds = await fetchMaxIdsForUser(UserID);
+    const fileName = file?.fileName ? file.fileName : "";
+    const base64Str = file?.binary ? file.binary : null;
     const date = new dayjs(record.date);
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
-        id: UserID + record.well_id,
+        id: UserID + ((await maxIds) + 1),
         UserID: UserID,
         WellID: record.well_id,
         AuthorizationID: "Auth4",
         IndustryType: record.industry_type,
-        SubmittedID: record.SubmittedID + 1,
+        SubmittedID: (await maxIds) + 1,
         SubmittedBy: UserID,
         SubmittedDate: date.format("YYYY-MM-DD"),
         IndustryName: record.industry_name,
-        ApprovedID: record.ApprovedID + 1,
+        ApprovedID: (await maxIds) + 1,
         ApprovedBy: null,
         ApprovedDate: "1900-01-01",
         Organization: Organization,
         Amount: record.amount,
-        Status: "Submitted"
+        Status: "Submitted",
+        Ctr: (await maxIds) + 1,
+        FileName: fileName,
+        Base64Str: base64Str
     };
-    if (file?.fileName) {
-        try {
-            const post = await axios.post(url, newRecord, {
-                params: {
-                    fileName: file?.fileName,
-                    base64Str: btoa(file?.binary)
-                }
-            });
-            console.log(await post);
-            return post;
-        } catch (e) {
-            return { error: "Error submiting new record with file" };
-        }
-    } else {
-        try {
-            const post = await axios.post(url, newRecord);
-            console.log(await post);
-            return post;
-        } catch (e) {
-            return { error: "Error submiting new record" };
-        }
+    console.log(fileName);
+    try {
+        const post = await axios.post(url, newRecord);
+        console.log(await post);
+        return post;
+    } catch (e) {
+        return { error: "Error submiting new record" };
     }
 };
 
