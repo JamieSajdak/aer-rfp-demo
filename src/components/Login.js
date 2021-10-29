@@ -90,20 +90,6 @@ const Layout = (props) => {
                 </form>
             </Modal>
             <style jsx>{`
-                .background {
-                    z-index: 10;
-                    height: 100vh;
-                    background: radial-gradient(
-                        rgba(0, 0, 0, 0.1),
-                        rgba(0, 0, 0, 0.8)
-                    );
-                    position: fixed;
-                    top: 0;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    cursor: not-allowed;
-                }
                 .login-container {
                     width: 70%;
                     margin: auto;

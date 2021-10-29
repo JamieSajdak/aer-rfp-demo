@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Aux from "../hoc/Auxillary";
 import { NavLink } from "react-router-dom";
 import { UserCxt } from "../services/userContext";
 import Modal from "./Modal";
 
 const Header = () => {
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
     return (
         <Aux>
             <div className="header">
@@ -23,22 +24,30 @@ const Header = () => {
                         <div className="desktop">
                             <Nav />
                         </div>
-
-                        <button className="menu-button">
+                        <button
+                            className="menu-button"
+                            onClick={() => setIsMenuVisible(!isMenuVisible)}
+                        >
                             <img
                                 src="/images/downarrow.svg"
                                 alt="drop down menu"
                                 className="menu-icon"
                             ></img>
                         </button>
-                        <div className="menu">
-                            <Modal>
-                                <div className="menu-container">
-                                    <Nav />
-                                </div>
-                            </Modal>
-                            <Nav />
-                        </div>
+                        {isMenuVisible ? (
+                            <div className="menu">
+                                <Modal>
+                                    <div className="menu-container">
+                                        <Nav
+                                            click={() =>
+                                                setIsMenuVisible(!isMenuVisible)
+                                            }
+                                        />
+                                    </div>
+                                </Modal>
+                                <Nav />
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>
@@ -47,6 +56,11 @@ const Header = () => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    height: 100%;
+                    text-align: center;
+                }
+                .menu-container > * + * {
+                    margin-top: 3rem;
                 }
                 .menu-icon {
                     width: 2rem;
@@ -75,7 +89,8 @@ const Header = () => {
                     }
                 }
                 @media (min-width: 500px) {
-                    .menu .menu-button {
+                    .menu,
+                    .menu-button {
                         display: none;
                     }
                 }
@@ -84,7 +99,7 @@ const Header = () => {
     );
 };
 
-const Nav = () => {
+const Nav = (props) => {
     const { setUserContext } = useContext(UserCxt);
     return (
         <Aux>
@@ -94,6 +109,7 @@ const Nav = () => {
                     exact
                     className="nav-link"
                     activeClassName="nav-link--active"
+                    onClick={props.click}
                 >
                     Review
                 </NavLink>
@@ -102,12 +118,16 @@ const Nav = () => {
                     exact
                     className="nav-link"
                     activeClassName="nav-link--active"
+                    onClick={props.click}
                 >
                     Submit Record
                 </NavLink>
                 <button
                     className="nav-link logout button bg--primary"
-                    onClick={() => setUserContext({})}
+                    onClick={() => {
+                        props.click();
+                        setUserContext({});
+                    }}
                 >
                     <img
                         src={"/images/user_icon.svg"}
@@ -119,9 +139,9 @@ const Nav = () => {
             </nav>
             <style jsx>{`
                 .nav {
-                    align-items: end;
                     display: flex;
                     flex-direction: column;
+                    padding: 2rem;
                 }
                 .nav-link {
                     text-decoration: none;
@@ -142,7 +162,6 @@ const Nav = () => {
                     --bg: white;
                     --fg: var(--cl-primary);
                     border-color: var(--cl-primary);
-                    margin-top: 0.5rem;
                     min-width: auto;
                     padding: 0.3rem 0.7rem 0.3rem 0.1rem;
                     display: flex;
@@ -163,6 +182,9 @@ const Nav = () => {
                         display: inline-block;
                         max-width: 8rem;
                         width: 20vw;
+                    }
+                    .logout {
+                        margin-top: 0.5rem;
                     }
                 }
             `}</style>
