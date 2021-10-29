@@ -1,21 +1,22 @@
 import axios from "axios";
 const dayjs = require("dayjs");
 
-const PROXY = "https://afternoon-sierra-79620.herokuapp.com/";
-const BASE_URL = PROXY + "https://aerapidemo.azurewebsites.net";
+const BASE_URL = "https://aerapidemo.azurewebsites.net";
 
 export const authorizeUser = async (userID, password) => {
     const url =
         BASE_URL +
         `/api/Industry/CheckLoginAndGetUserDetails/${userID},${password}`;
-
     try {
         const user = await axios.get(url);
         const userData = await user.data;
+        if ((await user.data.length) === 0) {
+            return { error: "- password or username incorrect" };
+        }
         return userData[0];
     } catch (e) {
         console.log(e);
-        return { error: e };
+        return { error: "- error connecting to server" };
     }
 };
 
@@ -33,7 +34,7 @@ export const fetchRecordsByAuthID = async (userID, Role, AuthID) => {
 };
 
 export const fetchAdminRecords = async () => {
-    const url = PROXY + BASE_URL + `/api/Industry/GetRecordsForAERUser`;
+    const url = BASE_URL + `/api/Industry/GetRecordsForAERUser`;
     return fetchRecords(url);
 };
 
@@ -48,12 +49,15 @@ const fetchRecords = async (url) => {
             delete record._attachments;
             delete record._ts;
             delete record.LocalFilePath;
+            delete record.ApprovedID;
+            delete record.SubmittedID;
+            delete record.Base64Str;
             return {
                 ...record,
                 Risk:
-                    record?.Amount > 100
+                    record?.Amount > 66
                         ? "High"
-                        : record?.Amount > 50
+                        : record?.Amount > 33
                         ? "Medium"
                         : "Low"
             };
@@ -76,7 +80,7 @@ export const fetchAuthIdsForUser = async ({ UserID }) => {
     }
 };
 
-export const postNewRecord = async (record, { UserID, Organization }) => {
+export const postNewRecord = async (record, { UserID, Organization }, file) => {
     const date = new dayjs(record.date);
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
@@ -94,16 +98,29 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
         ApprovedDate: "1900-01-01",
         Organization: Organization,
         Amount: record.amount,
-        Status: "Submitted",
-        FileName: null,
-        LocalFilePath: null
+        Status: "Submitted"
     };
-
-    try {
-        const post = await axios.post(url, newRecord);
-        return post;
-    } catch (e) {
-        return { error: "Could post record" };
+    if (file?.fileName) {
+        try {
+            const post = await axios.post(url, newRecord, {
+                params: {
+                    fileName: file?.fileName,
+                    base64Str: btoa(file?.binary)
+                }
+            });
+            console.log(await post);
+            return post;
+        } catch (e) {
+            return { error: "Error submiting new record with file" };
+        }
+    } else {
+        try {
+            const post = await axios.post(url, newRecord);
+            console.log(await post);
+            return post;
+        } catch (e) {
+            return { error: "Error submiting new record" };
+        }
     }
 };
 
@@ -117,13 +134,12 @@ export const putRecord = async (record, decision, userID) => {
         ApprovedBy: userID
     };
 
-    console.log(updatedRecord);
-
     try {
         const put = await axios.put(url, updatedRecord);
+        console.log(await put);
         return put;
     } catch (e) {
         console.log(e);
-        return { error: e };
+        return { error: "Error submitting change to server" };
     }
 };

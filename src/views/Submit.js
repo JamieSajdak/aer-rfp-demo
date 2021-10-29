@@ -9,15 +9,31 @@ import SelectField from "../components/SelectField";
 import InputDate from "../components/InputDate";
 import { UserCxt } from "../services/userContext";
 import { postNewRecord } from "../services/queryApi";
+import Spinner from "../components/Spiner";
 
 const Submit = (props) => {
     const { userContext, formContext } = useContext(UserCxt);
+    const [selectedFiles, setSelectedFiles] = useState([{}]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const formSubmit = async () => {
-        const submit = await postNewRecord(input, userContext);
-        alert("form submitted: ", await submit);
-        setInput({});
-        setSelectedFiles([]);
+        try {
+            setError("");
+            setIsLoading(true);
+            const submit = await postNewRecord(
+                input,
+                userContext,
+                selectedFiles[0]
+            );
+            if (await submit.error) {
+                setError(submit.error);
+            }
+        } finally {
+            setIsLoading(false);
+            setInput({});
+            setSelectedFiles([{}]);
+        }
     };
 
     const {
@@ -30,19 +46,12 @@ const Submit = (props) => {
         handleAutoPopulate
     } = useForm(formSubmit, validateRecordSubmit);
 
-    const [selectedFiles, setSelectedFiles] = useState([{}]);
-
     const handleFileUpload = (files) => {
         Object.keys(files).forEach((fileKey) => {
             const fileReader = new FileReader();
             fileReader.onload = function () {
-                console.log({
-                    binary: fileReader.result,
-                    name: files[fileKey].name
-                });
                 setSelectedFiles([
-                    ...selectedFiles,
-                    { binary: fileReader.result, name: files[fileKey].name }
+                    { binary: fileReader.result, fileName: files[fileKey].name }
                 ]);
             };
             fileReader.readAsBinaryString(files[fileKey]);
@@ -131,19 +140,33 @@ const Submit = (props) => {
                         <h2>Documentation Added</h2>
                         <div className="divider" />
                         {selectedFiles.map((file) => (
-                            <p>{file?.name}</p>
+                            <p>{file?.fileName}</p>
                         ))}
                     </div>
-                    <button
-                        className="button bg--secondary form-button"
-                        form="record-submission"
-                    >
-                        Submit
-                    </button>
+                    <div>
+                        {isLoading ? (
+                            <div className="button button--submit bg--secondary button--loading form-button">
+                                <Spinner />
+                            </div>
+                        ) : (
+                            <button
+                                form="form"
+                                className="button button--submit bg--secondary outside-button form-button"
+                                onClick={handleSubmit}
+                            >
+                                Submit
+                            </button>
+                        )}
+                        <p className="error" aria-live="polite">
+                            {error ? `* ${error}` : null}
+                        </p>
+                    </div>
                 </div>
             </div>
             <style jsx>{`
                 .form-button {
+                    height: 3rem;
+                    width: 15rem;
                     display: block;
                     margin-left: auto;
                 }

@@ -25,8 +25,8 @@ const useForm = (submitForm, validateInput) => {
                     handleChange({
                         target: {
                             value: lines[1][index].replace(/[\n\t\r]/g, ""),
-                            name: header.trim(),
-                        },
+                            name: header.trim()
+                        }
                     });
                 });
             };
@@ -45,7 +45,7 @@ const useForm = (submitForm, validateInput) => {
     const handleChange = (event) => {
         setInput((input) => ({
             ...input,
-            [event?.target?.name]: event?.target?.value,
+            [event?.target?.name]: event?.target?.value
         }));
         setErrors((errors) => {
             delete errors[event?.target?.name];
@@ -56,7 +56,7 @@ const useForm = (submitForm, validateInput) => {
     const handleDateChange = (value) => {
         setInput((input) => ({
             ...input,
-            date: value,
+            date: value
         }));
         setErrors((errors) => {
             delete errors.date;
@@ -72,7 +72,7 @@ const useForm = (submitForm, validateInput) => {
         errors,
         setInput,
         handleAutoPopulate,
-        setErrors,
+        setErrors
     };
 };
 
