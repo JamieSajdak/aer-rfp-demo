@@ -29,7 +29,7 @@ const Header = () => {
                             onClick={() => setIsMenuVisible(!isMenuVisible)}
                         >
                             <img
-                                src="/images/downarrow.svg"
+                                src="/images/menu.png"
                                 alt="drop down menu"
                                 className="menu-icon"
                             ></img>
@@ -62,8 +62,14 @@ const Header = () => {
                 .menu-container > * + * {
                     margin-top: 3rem;
                 }
+                .menu-button {
+                    margin-top: 0.8rem;
+                    background: none;
+                    border: none;
+                }
                 .menu-icon {
-                    width: 2rem;
+                    width: 1.8rem;
+                    opacity: 0.7;
                 }
                 .nav-container {
                     margin-left: auto;
@@ -80,7 +86,7 @@ const Header = () => {
                 .header-logo {
                     height: auto;
                     max-height: 4.5rem;
-                    max-width: 20vw;
+                    max-width: 30vw;
                     object-fit: contain;
                 }
                 @media (max-width: 500px) {
