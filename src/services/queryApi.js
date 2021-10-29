@@ -108,16 +108,18 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
                     base64Str: btoa(file?.binary)
                 }
             });
+            console.log(await post);
             return post;
         } catch (e) {
-            return { error: "Could not post record with file" };
+            return { error: "Error submiting new record with file" };
         }
     } else {
         try {
             const post = await axios.post(url, newRecord);
+            console.log(await post);
             return post;
         } catch (e) {
-            return { error: "Could not post record" };
+            return { error: "Error submiting new record" };
         }
     }
 };

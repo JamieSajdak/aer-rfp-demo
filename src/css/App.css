@@ -14,6 +14,10 @@
     --ut-shadow: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.2));
 }
 
+body {
+    font-family: var(--font-header-main);
+}
+
 .shadow {
     filter: var(--ut-shadow);
 }

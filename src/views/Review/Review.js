@@ -26,7 +26,6 @@ const Review = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        console.log(formContext);
         fetchRecords();
     }, []);
 

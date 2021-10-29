@@ -157,7 +157,9 @@ const Submit = (props) => {
                                 Submit
                             </button>
                         )}
-                        <p>{error}</p>
+                        <p className="error" aria-live="polite">
+                            * {error}
+                        </p>
                     </div>
                 </div>
             </div>
