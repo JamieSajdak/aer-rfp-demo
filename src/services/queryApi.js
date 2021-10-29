@@ -55,9 +55,9 @@ const fetchRecords = async (url) => {
             return {
                 ...record,
                 Risk:
-                    record?.Amount > 100
+                    record?.Amount > 66
                         ? "High"
-                        : record?.Amount > 50
+                        : record?.Amount > 33
                         ? "Medium"
                         : "Low"
             };

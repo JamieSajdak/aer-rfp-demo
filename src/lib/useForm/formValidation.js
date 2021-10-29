@@ -30,8 +30,8 @@ export const validateRecordSubmit = (input) => {
     if (!input.amount) {
         errors.amount = "- amount required";
     }
-    if (input.amount > 30 || input.amount < 0) {
-        errors.amount = "- value between 0-30 required";
+    if (input.amount >= 100 || input.amount < 0) {
+        errors.amount = "- value between 1-100 required";
     }
     if (!input.date) {
         errors.date = "- please enter a date";
