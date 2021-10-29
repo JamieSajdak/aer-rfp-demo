@@ -4,8 +4,6 @@ import { NavLink } from "react-router-dom";
 import { UserCxt } from "../services/userContext";
 
 const Header = () => {
-    const { setUserContext } = useContext(UserCxt);
-
     return (
         <Aux>
             <div className="header">
@@ -21,39 +19,37 @@ const Header = () => {
                             alt="one stop"
                             className="onestop"
                         />
-                        <nav className="space nav">
-                            <NavLink
-                                to="/"
-                                exact
-                                className="nav-link"
-                                activeClassName="nav-link--active"
-                            >
-                                Review
-                            </NavLink>
-                            <NavLink
-                                to="/submit"
-                                exact
-                                className="nav-link"
-                                activeClassName="nav-link--active"
-                            >
-                                Submit Record
-                            </NavLink>
-                            <button
-                                className="nav-link logout button bg--primary"
-                                onClick={() => setUserContext({})}
-                            >
+                        <div className="desktop">
+                            <Nav />
+                        </div>
+                        <div className="menu">
+                            <button className="menu-button">
                                 <img
-                                    src={"/images/user_icon.svg"}
-                                    className="logout-icon"
-                                    alt="logout"
-                                />
-                                Logout
+                                    src="/images/downarrow.svg"
+                                    alt="drop down menu"
+                                    className="menu-icon"
+                                ></img>
                             </button>
-                        </nav>
+                            <div className="menu-container">
+                                <Nav />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <style jsx>{`
+                .menu {
+                }
+                .menu-icon {
+                    width: 2rem;
+                }
+                .nav-container {
+                    margin-left: auto;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: end;
+                    justify-content: space-between;
+                }
                 .header {
                     background-color: white;
                     margin-bottom: 1rem;
@@ -65,6 +61,55 @@ const Header = () => {
                     max-width: 20vw;
                     object-fit: contain;
                 }
+                @media (max-width: 500px) {
+                    .desktop {
+                        display: none;
+                    }
+                }
+                @media (min-width: 500px) {
+                    .menu {
+                        display: none;
+                    }
+                }
+            `}</style>
+        </Aux>
+    );
+};
+
+const Nav = () => {
+    const { setUserContext } = useContext(UserCxt);
+    return (
+        <Aux>
+            <nav className="space nav">
+                <NavLink
+                    to="/"
+                    exact
+                    className="nav-link"
+                    activeClassName="nav-link--active"
+                >
+                    Review
+                </NavLink>
+                <NavLink
+                    to="/submit"
+                    exact
+                    className="nav-link"
+                    activeClassName="nav-link--active"
+                >
+                    Submit Record
+                </NavLink>
+                <button
+                    className="nav-link logout button bg--primary"
+                    onClick={() => setUserContext({})}
+                >
+                    <img
+                        src={"/images/user_icon.svg"}
+                        className="logout-icon"
+                        alt="logout"
+                    />
+                    Logout
+                </button>
+            </nav>
+            <style jsx>{`
                 .nav {
                     align-items: end;
                 }
@@ -78,13 +123,6 @@ const Header = () => {
                     font-weight: 500;
                     opacity: 1;
                     font-size: 1.1em;
-                }
-                .nav-container {
-                    margin-left: auto;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: end;
-                    justify-content: space-between;
                 }
                 .onestop {
                     max-width: 8rem;
@@ -105,6 +143,11 @@ const Header = () => {
                     width: 2rem;
                     height: 1.2rem;
                     opacity: 0.5;
+                }
+                @media (max-width: 500px) {
+                    .onestop {
+                        display: none;
+                    }
                 }
             `}</style>
         </Aux>
