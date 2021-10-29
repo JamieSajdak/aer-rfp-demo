@@ -129,8 +129,8 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
 };
 
 export const putRecord = async (record, decision, userID) => {
-    const url = BASE_URL + "/api/Industr";
-
+    const url = BASE_URL + "/api/Industry";
+    console.log(decision);
     const updatedRecord = {
         ...record,
         Status: decision,

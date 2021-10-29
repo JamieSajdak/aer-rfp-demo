@@ -28,7 +28,7 @@ const ProjectDetails = ({
                                 </LoadingButton>
                                 <LoadingButton
                                     isLoading={isLoading}
-                                    click={() => handleSubmit("Approved")}
+                                    click={() => handleSubmit("Denied")}
                                     color="red"
                                     size="button--sm"
                                 >
