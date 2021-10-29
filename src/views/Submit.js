@@ -9,12 +9,22 @@ import SelectField from "../components/SelectField";
 import InputDate from "../components/InputDate";
 import { UserCxt } from "../services/userContext";
 import { postNewRecord } from "../services/queryApi";
+import Spinner from "../components/Spiner";
 
 const Submit = (props) => {
     const { userContext, formContext } = useContext(UserCxt);
+    const [selectedFiles, setSelectedFiles] = useState([{}]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const formSubmit = async () => {
-        const submit = await postNewRecord(input, userContext);
+        setIsLoading(true);
+        const submit = await postNewRecord(
+            input,
+            userContext,
+            selectedFiles[0]
+        );
+        console.log(await submit);
+
         alert("form submitted: ", await submit);
         setInput({});
         setSelectedFiles([]);
@@ -30,19 +40,12 @@ const Submit = (props) => {
         handleAutoPopulate
     } = useForm(formSubmit, validateRecordSubmit);
 
-    const [selectedFiles, setSelectedFiles] = useState([{}]);
-
     const handleFileUpload = (files) => {
         Object.keys(files).forEach((fileKey) => {
             const fileReader = new FileReader();
             fileReader.onload = function () {
-                console.log({
-                    binary: fileReader.result,
-                    name: files[fileKey].name
-                });
                 setSelectedFiles([
-                    ...selectedFiles,
-                    { binary: fileReader.result, name: files[fileKey].name }
+                    { binary: fileReader.result, fileName: files[fileKey].name }
                 ]);
             };
             fileReader.readAsBinaryString(files[fileKey]);
@@ -126,20 +129,34 @@ const Submit = (props) => {
                             type="file"
                             change={(files) => handleFileUpload(files)}
                         />
+                        <button
+                            form="form"
+                            className="button button--submit bg--secondary"
+                            onClick={formSubmit}
+                        >
+                            Submit
+                        </button>
                     </form>
-                    <div>
+                    {/* <div>
                         <h2>Documentation Added</h2>
                         <div className="divider" />
                         {selectedFiles.map((file) => (
                             <p>{file?.name}</p>
                         ))}
                     </div>
-                    <button
-                        className="button bg--secondary form-button"
-                        form="record-submission"
-                    >
-                        Submit
-                    </button>
+                    {isLoading ? (
+                        <div className="button button--submit bg--secondary button--loading">
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <button
+                            form="form"
+                            className="button button--submit bg--secondary"
+                            onClick={formSubmit}
+                        >
+                            Submit
+                        </button> */}
+                    )}
                 </div>
             </div>
             <style jsx>{`

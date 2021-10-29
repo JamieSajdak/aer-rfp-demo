@@ -1,14 +1,12 @@
 import axios from "axios";
 const dayjs = require("dayjs");
 
-const PROXY = "https://afternoon-sierra-79620.herokuapp.com/";
-const BASE_URL = PROXY + "https://aerapidemo.azurewebsites.net";
+const BASE_URL = "https://aerapidemo.azurewebsites.net";
 
 export const authorizeUser = async (userID, password) => {
     const url =
         BASE_URL +
         `/api/Industry/CheckLoginAndGetUserDetails/${userID},${password}`;
-
     try {
         const user = await axios.get(url);
         const userData = await user.data;
@@ -33,7 +31,7 @@ export const fetchRecordsByAuthID = async (userID, Role, AuthID) => {
 };
 
 export const fetchAdminRecords = async () => {
-    const url = PROXY + BASE_URL + `/api/Industry/GetRecordsForAERUser`;
+    const url = BASE_URL + `/api/Industry/GetRecordsForAERUser`;
     return fetchRecords(url);
 };
 
@@ -48,6 +46,9 @@ const fetchRecords = async (url) => {
             delete record._attachments;
             delete record._ts;
             delete record.LocalFilePath;
+            delete record.ApprovedID;
+            delete record.SubmittedID;
+            delete record.id;
             return {
                 ...record,
                 Risk:
@@ -76,7 +77,7 @@ export const fetchAuthIdsForUser = async ({ UserID }) => {
     }
 };
 
-export const postNewRecord = async (record, { UserID, Organization }) => {
+export const postNewRecord = async (record, { UserID, Organization }, file) => {
     const date = new dayjs(record.date);
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
@@ -94,16 +95,20 @@ export const postNewRecord = async (record, { UserID, Organization }) => {
         ApprovedDate: "1900-01-01",
         Organization: Organization,
         Amount: record.amount,
-        Status: "Submitted",
-        FileName: null,
-        LocalFilePath: null
+        Status: "Submitted"
     };
-
+    console.log(btoa(file.binary));
+    console.log(newRecord);
     try {
-        const post = await axios.post(url, newRecord);
+        const post = await axios.post(url, newRecord, {
+            params: {
+                fileName: file.fileName,
+                base64Str: btoa(file.binary)
+            }
+        });
         return post;
     } catch (e) {
-        return { error: "Could post record" };
+        return { error: "Could not post record" };
     }
 };
 
