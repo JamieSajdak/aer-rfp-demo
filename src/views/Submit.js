@@ -102,7 +102,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="text"
-                            change={handleFormInputChange}
+                            change={handleDateChange}
                         />
                         <InputTextField
                             for="industry_name"

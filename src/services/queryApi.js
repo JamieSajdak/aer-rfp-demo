@@ -95,7 +95,7 @@ const fetchMaxIdsForUser = async (userID) => {
 export const postNewRecord = async (record, { UserID, Organization }, file) => {
     const maxIds = await fetchMaxIdsForUser(UserID);
     const fileName = file?.fileName ? file.fileName : "";
-    const base64Str = file?.binary ? file.binary : null;
+    const base64Str = file?.binary ? file.binary : "";
     const date = new dayjs(record.date);
     const url = BASE_URL + "/api/Industry";
     const newRecord = {
@@ -114,7 +114,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         Organization: Organization,
         Amount: record.amount,
         Status: "Submitted",
-        Ctr: (await maxIds) + 1,
+        Cntr: (await maxIds) + 1,
         FileName: fileName,
         Base64Str: base64Str
     };
