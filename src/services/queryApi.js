@@ -132,13 +132,12 @@ export const putRecord = async (record, decision, userID) => {
         ApprovedBy: userID
     };
 
-    console.log(updatedRecord);
-
     try {
         const put = await axios.put(url, updatedRecord);
+        console.log(await put);
         return put;
     } catch (e) {
         console.log(e);
-        return { error: e };
+        return { error: "Error submitting change to server" };
     }
 };

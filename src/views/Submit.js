@@ -18,24 +18,22 @@ const Submit = (props) => {
     const [error, setError] = useState("");
 
     const formSubmit = async () => {
-        setIsLoading(true);
-        const submit = await postNewRecord(
-            input,
-            userContext,
-            selectedFiles[0]
-        );
-        console.log(await submit);
-        if (await submit) {
-            setTimeout(() => {
-                if (submit?.error) {
-                    setError("Post to server failed, please try again.");
-                } else {
-                }
-                setIsLoading(false);
-            }, 1000);
+        try {
+            setError("");
+            setIsLoading(true);
+            const submit = await postNewRecord(
+                input,
+                userContext,
+                selectedFiles[0]
+            );
+            if (await submit.error) {
+                setError(submit.error);
+            }
+        } finally {
+            setIsLoading(false);
+            setInput({});
+            setSelectedFiles([{}]);
         }
-        setInput({});
-        setSelectedFiles([]);
     };
 
     const {
