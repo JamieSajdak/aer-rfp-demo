@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Aux from "../hoc/Auxillary";
 import { NavLink } from "react-router-dom";
 import { UserCxt } from "../services/userContext";
+import Modal from "./Modal";
 
 const Header = () => {
     return (
@@ -22,23 +23,30 @@ const Header = () => {
                         <div className="desktop">
                             <Nav />
                         </div>
+
+                        <button className="menu-button">
+                            <img
+                                src="/images/downarrow.svg"
+                                alt="drop down menu"
+                                className="menu-icon"
+                            ></img>
+                        </button>
                         <div className="menu">
-                            <button className="menu-button">
-                                <img
-                                    src="/images/downarrow.svg"
-                                    alt="drop down menu"
-                                    className="menu-icon"
-                                ></img>
-                            </button>
-                            <div className="menu-container">
-                                <Nav />
-                            </div>
+                            <Modal>
+                                <div className="menu-container">
+                                    <Nav />
+                                </div>
+                            </Modal>
+                            <Nav />
                         </div>
                     </div>
                 </div>
             </div>
             <style jsx>{`
-                .menu {
+                .menu-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
                 .menu-icon {
                     width: 2rem;
@@ -67,7 +75,7 @@ const Header = () => {
                     }
                 }
                 @media (min-width: 500px) {
-                    .menu {
+                    .menu .menu-button {
                         display: none;
                     }
                 }
@@ -112,6 +120,8 @@ const Nav = () => {
             <style jsx>{`
                 .nav {
                     align-items: end;
+                    display: flex;
+                    flex-direction: column;
                 }
                 .nav-link {
                     text-decoration: none;
@@ -144,9 +154,15 @@ const Nav = () => {
                     height: 1.2rem;
                     opacity: 0.5;
                 }
-                @media (max-width: 500px) {
+                @media (min-width: 500px) {
+                    .nav {
+                        flex-direction: row;
+                        align-items: end;
+                    }
                     .onestop {
-                        display: none;
+                        display: inline-block;
+                        max-width: 8rem;
+                        width: 20vw;
                     }
                 }
             `}</style>
