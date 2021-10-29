@@ -118,7 +118,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         FileName: fileName,
         Base64Str: base64Str
     };
-    console.log(fileName);
+    console.log(newRecord);
     try {
         const post = await axios.post(url, newRecord);
         console.log(await post);

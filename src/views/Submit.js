@@ -16,6 +16,7 @@ const Submit = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([{}]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
 
     const formSubmit = async () => {
         try {
@@ -28,6 +29,8 @@ const Submit = (props) => {
             );
             if (await submit.error) {
                 setError(submit.error);
+            } else {
+                setSuccessMsg("Submission Accepted.");
             }
         } finally {
             setIsLoading(false);
@@ -58,6 +61,12 @@ const Submit = (props) => {
         });
     };
 
+    const handleFormInputChange = (event) => {
+        setError("");
+        setSuccessMsg("");
+        handleChange(event);
+    };
+
     return (
         <Aux>
             <div className="container">
@@ -74,7 +83,7 @@ const Submit = (props) => {
                             label="Authorization Number"
                             errors={errors}
                             input={input}
-                            change={handleChange}
+                            change={handleFormInputChange}
                             options={formContext.authOptions}
                             placeholder="Select Authoirization number"
                         />
@@ -84,7 +93,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="text"
-                            change={handleChange}
+                            change={handleFormInputChange}
                             placeholder="Enter Well ID"
                         />
                         <InputDate
@@ -93,7 +102,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="text"
-                            change={handleDateChange}
+                            change={handleFormInputChange}
                         />
                         <InputTextField
                             for="industry_name"
@@ -101,7 +110,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="text"
-                            change={handleChange}
+                            change={handleFormInputChange}
                             placeholder="Enter Industry Name"
                         />
                         <InputTextField
@@ -109,7 +118,7 @@ const Submit = (props) => {
                             label="Industry Type"
                             errors={errors}
                             input={input}
-                            change={handleChange}
+                            change={handleFormInputChange}
                             placeholder="Enter Industry Type"
                         />
                         <InputTextField
@@ -117,7 +126,7 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="number"
-                            change={handleChange}
+                            change={handleFormInputChange}
                             placeholder="Enter Amount"
                         />
                         <InputFile
@@ -125,7 +134,11 @@ const Submit = (props) => {
                             label="Auto Populate"
                             input={input}
                             type="file"
-                            change={(file) => handleAutoPopulate(file)}
+                            change={(file) => {
+                                setError("");
+                                setSuccessMsg("");
+                                handleAutoPopulate(file);
+                            }}
                         />
                         <InputFile
                             for="file"
@@ -133,7 +146,11 @@ const Submit = (props) => {
                             errors={errors}
                             input={input}
                             type="file"
-                            change={(files) => handleFileUpload(files)}
+                            change={(files) => {
+                                setError("");
+                                setSuccessMsg("");
+                                handleFileUpload(files);
+                            }}
                         />
                     </form>
                     <div>
@@ -159,6 +176,9 @@ const Submit = (props) => {
                         )}
                         <p className="error" aria-live="polite">
                             {error ? `* ${error}` : null}
+                        </p>
+                        <p className="error--success" aria-live="polite">
+                            {successMsg ? `* ${successMsg}` : null}
                         </p>
                     </div>
                 </div>
