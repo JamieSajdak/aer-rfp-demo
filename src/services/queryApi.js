@@ -48,7 +48,7 @@ const fetchRecords = async (url) => {
             delete record.LocalFilePath;
             delete record.ApprovedID;
             delete record.SubmittedID;
-            delete record.id;
+            delete record.Base64Str;
             return {
                 ...record,
                 Risk:
@@ -97,18 +97,25 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         Amount: record.amount,
         Status: "Submitted"
     };
-    console.log(btoa(file.binary));
-    console.log(newRecord);
-    try {
-        const post = await axios.post(url, newRecord, {
-            params: {
-                fileName: file.fileName,
-                base64Str: btoa(file.binary)
-            }
-        });
-        return post;
-    } catch (e) {
-        return { error: "Could not post record" };
+    if (file?.fileName) {
+        try {
+            const post = await axios.post(url, newRecord, {
+                params: {
+                    fileName: file?.fileName,
+                    base64Str: btoa(file?.binary)
+                }
+            });
+            return post;
+        } catch (e) {
+            return { error: "Could not post record with file" };
+        }
+    } else {
+        try {
+            const post = await axios.post(url, newRecord);
+            return post;
+        } catch (e) {
+            return { error: "Could not post record" };
+        }
     }
 };
 

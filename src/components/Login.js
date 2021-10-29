@@ -7,15 +7,16 @@ import { authorizeUser, fetchAuthIdsForUser } from "../services/queryApi";
 import Spinner from "./Spiner";
 
 const Layout = (props) => {
-    const { setUserContext, setFormContext } = useContext(UserCxt);
+    const { userContext, setUserContext, setFormContext } = useContext(UserCxt);
     const [isLoading, setIsLoading] = useState(false);
 
     const submitLogin = async () => {
         setIsLoading(true);
         const userAuth = await authorizeUser(input.username, input.password);
         if (await userAuth?.UserID) {
+            console.log(userAuth);
             userAuth.auth = "success";
-            setUserContext(userAuth);
+            setUserContext((userContext) => ({ ...userContext, ...userAuth }));
             const authIds = await fetchAuthIdsForUser(userAuth);
             if ((await authIds.length) > 0) {
                 setFormContext({

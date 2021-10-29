@@ -5,7 +5,7 @@ const SelectField = (props) => {
     return (
         <Aux>
             <div className="input">
-                <label className="input-label">
+                <label className="input-label" htmlFor={props.for}>
                     {props.label || props.for}
                     <span aria-hidden="true">{" * "}</span>
                     <span aria-live="polite" className="input-error">

@@ -11,7 +11,7 @@ const InputTextField = (props) => {
     return (
         <Aux>
             <div className="input">
-                <label className="input-label" for={props.for}>
+                <label className="input-label" htmlFor={props.for}>
                     {props.label || props.for}
                     <span aria-hidden="true">{" * "}</span>
                     <span aria-live="polite" className="input-error">
@@ -37,17 +37,15 @@ const InputTextField = (props) => {
                 </div>
             </div>
 
-            <style jsx>
-                {`
-                    .icon {
-                        width: 1.8rem;
-                        position: absolute;
-                        top: 50%;
-                        transform: translate(0.2rem, -50%);
-                        opacity: 0.5;
-                    }
-                `}
-            </style>
+            <style jsx>{`
+                .icon {
+                    width: 1.8rem;
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(0.2rem, -50%);
+                    opacity: 0.5;
+                }
+            `}</style>
         </Aux>
     );
 };

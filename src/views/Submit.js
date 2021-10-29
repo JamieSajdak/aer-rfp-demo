@@ -24,7 +24,9 @@ const Submit = (props) => {
             selectedFiles[0]
         );
         console.log(await submit);
-
+        if (await submit) {
+            setIsLoading(false);
+        }
         alert("form submitted: ", await submit);
         setInput({});
         setSelectedFiles([]);
@@ -129,38 +131,33 @@ const Submit = (props) => {
                             type="file"
                             change={(files) => handleFileUpload(files)}
                         />
-                        <button
-                            form="form"
-                            className="button button--submit bg--secondary"
-                            onClick={formSubmit}
-                        >
-                            Submit
-                        </button>
                     </form>
-                    {/* <div>
+                    <div>
                         <h2>Documentation Added</h2>
                         <div className="divider" />
                         {selectedFiles.map((file) => (
-                            <p>{file?.name}</p>
+                            <p>{file?.fileName}</p>
                         ))}
                     </div>
                     {isLoading ? (
-                        <div className="button button--submit bg--secondary button--loading">
+                        <div className="button button--submit bg--secondary button--loading form-button">
                             <Spinner />
                         </div>
                     ) : (
                         <button
                             form="form"
-                            className="button button--submit bg--secondary"
-                            onClick={formSubmit}
+                            className="button button--submit bg--secondary outside-button form-button"
+                            onClick={handleSubmit}
                         >
                             Submit
-                        </button> */}
+                        </button>
                     )}
                 </div>
             </div>
             <style jsx>{`
                 .form-button {
+                    height: 3rem;
+                    width: 15rem;
                     display: block;
                     margin-left: auto;
                 }
