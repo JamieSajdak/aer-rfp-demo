@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Aux from "../../hoc/Auxillary";
 import LoadingButton from "../../components/LoadingButton";
 
@@ -41,7 +41,7 @@ const ProjectDetails = ({
                             className="close"
                             onClick={() => setSelectedProject()}
                         >
-                            <img src="/images/cross.svg"></img>
+                            <img src="/images/cross.svg" alt="close"></img>
                         </button>
                     </div>
                     <div className="selected-project-details">

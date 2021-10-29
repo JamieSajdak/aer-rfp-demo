@@ -2,7 +2,6 @@ import React from "react";
 import Aux from "../hoc/Auxillary";
 
 const Spinner = (props) => {
-    const classes = ["Loader-container", ""];
     return (
         <Aux>
             <div className="Loader-container">
