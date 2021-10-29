@@ -12,7 +12,6 @@ import {
 import SelectField from "../../components/SelectField";
 import Aux from "../../hoc/Auxillary";
 import ReviewTable from "./ReviewTable";
-import Spinner from "../../components/Spiner";
 import ProjectDetails from "./Project Details";
 
 const Review = (props) => {
@@ -32,20 +31,23 @@ const Review = (props) => {
     }, []);
 
     const fetchRecords = async () => {
-        setIsLoading(true);
-        if (userContext?.Role === USER_ROLE_AER) {
-            const data = await fetchAdminRecords();
-            if (!data?.error) {
-                setRecords(await data);
+        try {
+            setIsLoading(true);
+            if (userContext?.Role === USER_ROLE_AER) {
+                const data = await fetchAdminRecords();
+                if (!data?.error) {
+                    setRecords(await data);
+                } else {
+                    setRecords([data]);
+                }
             } else {
-                setRecords([data]);
+                const data = await fetchIndustryRecords(userContext.UserID);
+                setRecords(await data);
             }
-        } else {
-            const data = await fetchIndustryRecords(userContext.UserID);
-            setRecords(await data);
+        } finally {
+            setIsLoading(false);
+            setInput("");
         }
-        setIsLoading(false);
-        setInput("");
     };
 
     const handleSort = (event, index) => {
@@ -73,14 +75,21 @@ const Review = (props) => {
     };
 
     const handleSubmit = async (decision) => {
-        alert("Project is: " + decision);
-        const put = await putRecord(
-            selectedProject,
-            decision,
-            userContext.UserID
-        );
-        setSelectedProject();
-        fetchRecords();
+        try {
+            setIsLoading(true);
+            const put = await putRecord(
+                selectedProject,
+                decision,
+                userContext.UserID
+            );
+            console.log(await put);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setIsLoading(false);
+            setSelectedProject();
+            fetchRecords();
+        }
     };
 
     const handleSearchByAuthId = async (event) => {
@@ -107,8 +116,6 @@ const Review = (props) => {
     };
 
     const selectProjectClick = (record) => {
-        console.log("click");
-        console.log(selectedProject, record);
         if (selectedProject?.id === record.id) {
             setSelectedProject();
         } else {
@@ -119,7 +126,10 @@ const Review = (props) => {
     return (
         <Aux>
             <div className="container">
-                <h1>{userContext?.Role} Review</h1>
+                <h1>
+                    {userContext?.Role === "IND" ? "Industry User" : "Aer User"}{" "}
+                    Review
+                </h1>
                 <div className="flow">
                     <div className="divider" />
                     <div className="auth-container">

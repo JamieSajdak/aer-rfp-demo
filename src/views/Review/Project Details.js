@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Aux from "../../hoc/Auxillary";
+import LoadingButton from "../../components/LoadingButton";
 
-const ProjectDetails = ({ selectedProject, ifDateFormat, handleSubmit }) => {
+const ProjectDetails = ({
+    selectedProject,
+    ifDateFormat,
+    handleSubmit,
+    isLoading
+}) => {
+    const [selectedButton, setSelectedButton] = useState();
     return (
         <Aux>
             <div className="space">
@@ -11,18 +18,22 @@ const ProjectDetails = ({ selectedProject, ifDateFormat, handleSubmit }) => {
                             <h2>Project Details</h2>
                             {selectedProject?.Status === "Submitted" ? (
                                 <Aux>
-                                    <button
-                                        className="button button--sm bg--secondary"
-                                        onClick={() => handleSubmit("Approved")}
+                                    <LoadingButton
+                                        isLoading={isLoading}
+                                        click={() => handleSubmit("Approved")}
+                                        color="green"
+                                        size="button--sm"
                                     >
                                         Approve
-                                    </button>
-                                    <button
-                                        className="button button--sm bg--danger"
-                                        onClick={() => handleSubmit("Denied")}
+                                    </LoadingButton>
+                                    <LoadingButton
+                                        isLoading={isLoading}
+                                        click={() => handleSubmit("Approved")}
+                                        color="red"
+                                        size="button--sm"
                                     >
                                         Deny
-                                    </button>
+                                    </LoadingButton>
                                 </Aux>
                             ) : null}
                         </div>

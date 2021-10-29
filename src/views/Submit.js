@@ -15,6 +15,7 @@ const Submit = (props) => {
     const { userContext, formContext } = useContext(UserCxt);
     const [selectedFiles, setSelectedFiles] = useState([{}]);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const formSubmit = async () => {
         setIsLoading(true);
@@ -25,9 +26,14 @@ const Submit = (props) => {
         );
         console.log(await submit);
         if (await submit) {
-            setIsLoading(false);
+            setTimeout(() => {
+                if (submit?.error) {
+                    setError("Post to server failed, please try again.");
+                } else {
+                }
+                setIsLoading(false);
+            }, 1000);
         }
-        alert("form submitted: ", await submit);
         setInput({});
         setSelectedFiles([]);
     };
@@ -139,19 +145,22 @@ const Submit = (props) => {
                             <p>{file?.fileName}</p>
                         ))}
                     </div>
-                    {isLoading ? (
-                        <div className="button button--submit bg--secondary button--loading form-button">
-                            <Spinner />
-                        </div>
-                    ) : (
-                        <button
-                            form="form"
-                            className="button button--submit bg--secondary outside-button form-button"
-                            onClick={handleSubmit}
-                        >
-                            Submit
-                        </button>
-                    )}
+                    <div>
+                        {isLoading ? (
+                            <div className="button button--submit bg--secondary button--loading form-button">
+                                <Spinner />
+                            </div>
+                        ) : (
+                            <button
+                                form="form"
+                                className="button button--submit bg--secondary outside-button form-button"
+                                onClick={handleSubmit}
+                            >
+                                Submit
+                            </button>
+                        )}
+                        <p>{error}</p>
+                    </div>
                 </div>
             </div>
             <style jsx>{`
