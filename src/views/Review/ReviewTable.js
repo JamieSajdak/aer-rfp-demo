@@ -24,6 +24,12 @@ const ReviewTable = ({
             isForIndustry: true
         },
         {
+            for: "User",
+            click: handleSort,
+            id: "UserID",
+            isForIndustry: true
+        },
+        {
             for: "Auth Number",
             click: handleSort,
             id: "AuthorizationID",

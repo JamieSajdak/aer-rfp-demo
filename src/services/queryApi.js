@@ -11,12 +11,12 @@ export const authorizeUser = async (userID, password) => {
         const user = await axios.get(url);
         const userData = await user.data;
         if ((await user.data.length) === 0) {
-            return { error: "- password or username incorrect" };
+            return { error: "- invalid login details" };
         }
         return userData[0];
     } catch (e) {
         console.log(e);
-        return { error: "- error connecting to server" };
+        return { error: "- invalid login details" };
     }
 };
 
@@ -52,6 +52,7 @@ const fetchRecords = async (url) => {
             delete record.ApprovedID;
             delete record.SubmittedID;
             delete record.Base64Str;
+            delete record.Cntr;
             return {
                 ...record,
                 Risk:
@@ -84,7 +85,6 @@ const fetchMaxIdsForUser = async (userID) => {
     const url = BASE_URL + `/api/Industry/GetMaxIDyUserID/${userID}`;
     try {
         const authIds = await axios.get(url);
-        console.log(await authIds.data);
         return await authIds.data;
     } catch (e) {
         console.log(e);
@@ -118,7 +118,6 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
         FileName: fileName,
         Base64Str: btoa(base64Str)
     };
-    console.log(newRecord);
     try {
         const post = await axios.post(url, newRecord);
         console.log(await post);
@@ -129,8 +128,7 @@ export const postNewRecord = async (record, { UserID, Organization }, file) => {
 };
 
 export const putRecord = async (record, decision, userID) => {
-    const url = BASE_URL + "/api/Industr";
-
+    const url = BASE_URL + "/api/Industry";
     const updatedRecord = {
         ...record,
         Status: decision,
@@ -140,7 +138,6 @@ export const putRecord = async (record, decision, userID) => {
 
     try {
         const put = await axios.put(url, updatedRecord);
-        console.log(await put);
         return put;
     } catch (e) {
         console.log(e);

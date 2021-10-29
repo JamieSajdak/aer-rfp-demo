@@ -74,14 +74,17 @@ const Review = (props) => {
     };
 
     const handleSubmit = async (decision) => {
-        const isSuccessfull = false;
+        let isSuccessfull = false;
         try {
             const put = await putRecord(
                 selectedProject,
                 decision,
                 userContext.UserID
             );
-            isSuccessfull = true;
+
+            if (await !put.error) {
+                isSuccessfull = true;
+            }
         } catch (e) {
             console.log(e);
         } finally {
@@ -128,6 +131,12 @@ const Review = (props) => {
 
     return (
         <Aux>
+            <ProjectDetails
+                selectedProject={selectedProject}
+                ifDateFormat={ifDateFormat}
+                handleSubmit={handleSubmit}
+                setSelectedProject={setSelectedProject}
+            />
             <div className="container">
                 <h1>
                     {userContext?.Role === "IND" ? "Industry User" : "Aer User"}{" "}
@@ -156,7 +165,6 @@ const Review = (props) => {
                     {records[0]?.error ? (
                         <p>Error connecting to the server</p>
                     ) : null}
-
                     <ReviewTable
                         handleSort={handleSort}
                         selectedHeaderIndex={selectedHeaderIndex}
@@ -166,11 +174,7 @@ const Review = (props) => {
                         ifDateFormat={ifDateFormat}
                         isLoading={isLoading}
                     />
-                    <ProjectDetails
-                        selectedProject={selectedProject}
-                        ifDateFormat={ifDateFormat}
-                        handleSubmit={handleSubmit}
-                    />
+                    \
                 </div>
             </div>
 

@@ -8,7 +8,7 @@ import Spinner from "./Spiner";
 import Modal from "./Modal";
 
 const Layout = (props) => {
-    const { userContext, setUserContext, setFormContext } = useContext(UserCxt);
+    const { setUserContext, setFormContext } = useContext(UserCxt);
     const [isLoading, setIsLoading] = useState(false);
 
     const submitLogin = async () => {
