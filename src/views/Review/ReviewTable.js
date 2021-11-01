@@ -103,16 +103,11 @@ const ReviewTable = ({
                                         className={
                                             record.id === selectedProject?.id
                                                 ? "row row--selected"
-                                                : isUserAer
-                                                ? "row"
-                                                : ""
+                                                : "row"
                                         }
-                                        role={isUserAer ? "button" : ""}
-                                        onClick={
-                                            isUserAer
-                                                ? () =>
-                                                      selectProjectClick(record)
-                                                : null
+                                        role="button"
+                                        onClick={() =>
+                                            selectProjectClick(record)
                                         }
                                     >
                                         {industryTableHeaders.map(

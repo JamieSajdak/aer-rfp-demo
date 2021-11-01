@@ -174,7 +174,6 @@ const Review = (props) => {
                         ifDateFormat={ifDateFormat}
                         isLoading={isLoading}
                     />
-                    \
                 </div>
             </div>
 

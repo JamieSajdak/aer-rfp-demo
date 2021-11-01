@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Aux from "../../hoc/Auxillary";
 import LoadingButton from "../../components/LoadingButton";
+import { UserCxt } from "../../services/userContext";
 
 const ProjectDetails = ({
     selectedProject,
@@ -9,6 +10,9 @@ const ProjectDetails = ({
     isLoading,
     setSelectedProject
 }) => {
+    const { userContext } = useContext(UserCxt);
+    const isUserAer = userContext.Role === "AER";
+
     return (
         <Aux>
             {selectedProject ? <div className="background" /> : null}
@@ -16,7 +20,8 @@ const ProjectDetails = ({
                 <div className="selected-project shadow">
                     <div className="selected-project-header space">
                         <h2>Project Details</h2>
-                        {selectedProject?.Status === "Submitted" ? (
+                        {selectedProject?.Status === "Submitted" &&
+                        isUserAer ? (
                             <Aux>
                                 <LoadingButton
                                     isLoading={isLoading}
