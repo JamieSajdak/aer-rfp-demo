@@ -13,6 +13,7 @@ import SelectField from "../../components/SelectField";
 import Aux from "../../hoc/Auxillary";
 import ReviewTable from "./ReviewTable";
 import ProjectDetails from "./Project Details";
+import PageTitle from "../../components/PageTitle";
 
 const Review = (props) => {
     const USER_ROLE_AER = "AER";
@@ -140,14 +141,15 @@ const Review = (props) => {
                 handleSubmit={handleSubmit}
                 setSelectedProject={setSelectedProject}
             />
+            <PageTitle title="Record Review" image="/images/titleImage.jpg" />
             <div className="container">
                 <div className="space pageHeader">
-                    <h1>
+                    <h2>
                         {userContext?.Role === "IND"
                             ? "Industry User"
                             : "AER User"}{" "}
                         Review
-                    </h1>
+                    </h2>
                     <p>
                         Welcome {userContext.UserID} /{" "}
                         {userContext.Organization}
