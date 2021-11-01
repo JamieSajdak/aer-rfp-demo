@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
+const dayjs = require("dayjs");
 
 const useForm = (submitForm, validateInput) => {
     const [input, setInput] = useState({});
@@ -22,9 +23,13 @@ const useForm = (submitForm, validateInput) => {
                     return line.split(",");
                 });
                 lines[0].forEach((header, index) => {
+                    let newValue = lines[1][index].replace(/[\n\t\r]/g, "");
+                    if (header === "date") {
+                        newValue = new Date(newValue);
+                    }
                     handleChange({
                         target: {
-                            value: lines[1][index].replace(/[\n\t\r]/g, ""),
+                            value: newValue,
                             name: header.trim()
                         }
                     });
