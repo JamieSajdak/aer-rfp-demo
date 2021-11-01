@@ -111,7 +111,7 @@ const Submit = (props) => {
                             input={input}
                             type="text"
                             change={handleFormInputChange}
-                            placeholder="Enter Company Name"
+                            placeholder="Enter Industry Name"
                         />
                         <InputTextField
                             for="industry_type"
