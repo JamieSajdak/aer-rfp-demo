@@ -69,15 +69,15 @@ const ProjectDetails = ({
                     <div className="selected-project-details">
                         {Object.keys(selectedProject)
                             .filter((record) => {
-                                if (record === "ApprovedDate") {
-                                    if (
-                                        dayjs(selectedProject[record]).isBefore(
-                                            "2000-01-01"
-                                        )
-                                    ) {
-                                        return false;
-                                    }
-                                }
+                                // if (record === "ApprovedDate") {
+                                //     if (
+                                //         dayjs(selectedProject[record]).isBefore(
+                                //             "2000-01-01"
+                                //         )
+                                //     ) {
+                                //         return false;
+                                //     }
+                                // }
                                 return detailsToShow.includes(record);
                             })
                             .map((key) => {
@@ -85,7 +85,8 @@ const ProjectDetails = ({
                                     <div>
                                         <p>
                                             <span className="h3">
-                                                {key.replace("_", " ")}:{" "}
+                                                {key}
+                                                {":  "}
                                             </span>
                                             {ifDateFormat(selectedProject, key)}
                                         </p>

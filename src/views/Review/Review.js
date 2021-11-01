@@ -116,6 +116,9 @@ const Review = (props) => {
             (column === "ApprovedDate" && record[column])
         ) {
             const date = new dayjs(record[column]);
+            if (date.isBefore(dayjs("2000-01-01"))) {
+                return "";
+            }
             return date.format("DD-MMM-YYYY").toUpperCase();
         }
         return record[column];
