@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import Aux from "../../hoc/Auxillary";
 import LoadingButton from "../../components/LoadingButton";
+import { UserCxt } from "../../services/userContext";
+const dayjs = require("dayjs");
 
 const ProjectDetails = ({
     selectedProject,
@@ -9,6 +11,25 @@ const ProjectDetails = ({
     isLoading,
     setSelectedProject
 }) => {
+    const { userContext } = useContext(UserCxt);
+    const isUserAer = userContext.Role === "AER";
+
+    const detailsToShow = [
+        "AuthorizationID",
+        "SubmittedDate",
+        "ApprovedDate",
+        "Status",
+        "UserID",
+        "IndustryType",
+        "IndustryName",
+        "Organization",
+        "FileName",
+        "WellID",
+        "SubmittedBy",
+        "ApprovedBy",
+        "Amount",
+        "Risk"
+    ];
     return (
         <Aux>
             {selectedProject ? <div className="background" /> : null}
@@ -16,7 +37,8 @@ const ProjectDetails = ({
                 <div className="selected-project shadow">
                     <div className="selected-project-header space">
                         <h2>Project Details</h2>
-                        {selectedProject?.Status === "Submitted" ? (
+                        {selectedProject?.Status === "Submitted" &&
+                        isUserAer ? (
                             <Aux>
                                 <LoadingButton
                                     isLoading={isLoading}
@@ -45,18 +67,32 @@ const ProjectDetails = ({
                         </button>
                     </div>
                     <div className="selected-project-details">
-                        {Object.keys(selectedProject).map((key) => {
-                            return (
-                                <div>
-                                    <p>
-                                        <span className="h3">
-                                            {key.replace("_", " ")}:{" "}
-                                        </span>
-                                        {ifDateFormat(selectedProject, key)}
-                                    </p>
-                                </div>
-                            );
-                        })}
+                        {Object.keys(selectedProject)
+                            .filter((record) => {
+                                // if (record === "ApprovedDate") {
+                                //     if (
+                                //         dayjs(selectedProject[record]).isBefore(
+                                //             "2000-01-01"
+                                //         )
+                                //     ) {
+                                //         return false;
+                                //     }
+                                // }
+                                return detailsToShow.includes(record);
+                            })
+                            .map((key) => {
+                                return (
+                                    <div>
+                                        <p>
+                                            <span className="h3">
+                                                {key}
+                                                {":  "}
+                                            </span>
+                                            {ifDateFormat(selectedProject, key)}
+                                        </p>
+                                    </div>
+                                );
+                            })}
                     </div>
                 </div>
             ) : null}

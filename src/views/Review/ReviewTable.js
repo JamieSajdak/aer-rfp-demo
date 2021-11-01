@@ -27,7 +27,7 @@ const ReviewTable = ({
             for: "User",
             click: handleSort,
             id: "UserID",
-            isForIndustry: true
+            isForIndustry: false
         },
         {
             for: "Auth Number",
@@ -41,7 +41,7 @@ const ReviewTable = ({
             id: "IndustryType",
             isForIndustry: true
         },
-        { for: "Amt", click: handleSort, id: "Amount", isForIndustry: false },
+        { for: "Amt", click: handleSort, id: "Amount", isForIndustry: true },
         { for: "Risk", click: handleSort, id: "Risk", isForIndustry: true },
         {
             for: "Date",
@@ -103,16 +103,11 @@ const ReviewTable = ({
                                         className={
                                             record.id === selectedProject?.id
                                                 ? "row row--selected"
-                                                : isUserAer
-                                                ? "row"
-                                                : ""
+                                                : "row"
                                         }
-                                        role={isUserAer ? "button" : ""}
-                                        onClick={
-                                            isUserAer
-                                                ? () =>
-                                                      selectProjectClick(record)
-                                                : null
+                                        role="button"
+                                        onClick={() =>
+                                            selectProjectClick(record)
                                         }
                                     >
                                         {industryTableHeaders.map(
