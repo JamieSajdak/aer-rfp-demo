@@ -141,10 +141,18 @@ const Review = (props) => {
                 setSelectedProject={setSelectedProject}
             />
             <div className="container">
-                <h1>
-                    {userContext?.Role === "IND" ? "Industry User" : "Aer User"}{" "}
-                    Review
-                </h1>
+                <div className="space pageHeader">
+                    <h1>
+                        {userContext?.Role === "IND"
+                            ? "Industry User"
+                            : "AER User"}{" "}
+                        Review
+                    </h1>
+                    <p>
+                        Welcome {userContext.UserID} /{" "}
+                        {userContext.Organization}
+                    </p>
+                </div>
                 <div className="flow">
                     <div className="divider" />
                     <div className="auth-container">
@@ -181,6 +189,10 @@ const Review = (props) => {
             </div>
 
             <style jsx>{`
+                .pageHeader {
+                    justify-content: space-between;
+                    align-items: end;
+                }
                 .search-input {
                     max-width: 20rem;
                     background-image: url("./images/searchIcon.svg");
