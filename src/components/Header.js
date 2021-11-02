@@ -91,12 +91,12 @@ const Header = (props) => {
                     max-width: 30vw;
                     object-fit: contain;
                 }
-                @media (max-width: 500px) {
+                @media (max-width: 600px) {
                     .desktop {
                         display: none;
                     }
                 }
-                @media (min-width: 500px) {
+                @media (min-width: 600px) {
                     .menu,
                     .menu-button {
                         display: none;
@@ -152,6 +152,9 @@ const Nav = (props) => {
                     display: flex;
                     flex-direction: column;
                 }
+                .nav > * + * {
+                    margin: 1.5rem 0 0 0;
+                }
                 .nav-link {
                     text-decoration: none;
                     color: #0a5688;
@@ -182,10 +185,13 @@ const Nav = (props) => {
                     height: 1.2rem;
                     opacity: 0.5;
                 }
-                @media (min-width: 500px) {
+                @media (min-width: 600px) {
                     .nav {
                         flex-direction: row;
                         align-items: end;
+                    }
+                    .nav > * + * {
+                        margin: 0 0 0 1.5rem;
                     }
                     .onestop {
                         display: inline-block;
