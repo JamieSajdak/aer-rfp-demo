@@ -15,8 +15,8 @@ export const validateRecordSubmit = (input) => {
     if (!input.well_id) {
         errors.well_id = "- well ID required";
     }
-    if (!/[^a-z0-9]/.test(input.well_id)) {
-        errors.well_id = "- enter a valid well ID";
+    if (!/^[A-Z]{2}-[\d]{2}-[\d]{2}$/.test(input.well_id)) {
+        errors.well_id = "- enter a valid well ID (AA-00-00)";
     }
     if (!input.authorization_num || input.authorization_num === "") {
         errors.authorization_num = "- authorization number required";
