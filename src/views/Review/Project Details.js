@@ -149,7 +149,7 @@ const ProjectDetails = ({
                     display: grid;
                     grid-template-columns: repeat(
                         auto-fill,
-                        minmax(15rem, 1fr)
+                        minmax(20rem, 1fr)
                     );
                     row-gap: 0.2rem;
                 }
