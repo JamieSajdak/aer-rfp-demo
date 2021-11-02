@@ -29,6 +29,9 @@ const InputDate = (props) => {
                 />
             </div>
             <style jsx>{`
+                .react-date-picker__calendar {
+                    z-index: 9;
+                }
                 .react-date-picker__wrapper {
                     border: none;
                     height: 100%;
