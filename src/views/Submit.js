@@ -198,7 +198,7 @@ const Submit = (props) => {
                     margin-left: auto;
                 }
                 .form {
-                    margin-top: 1rem;
+                    margin-top: 2rem;
                     display: grid;
                     grid-template-columns: repeat(
                         auto-fill,

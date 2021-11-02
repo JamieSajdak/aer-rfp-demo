@@ -22,7 +22,7 @@ const PageTitle = (props) => {
                     position: relative;
                 }
                 .titleText {
-                    font-size: 4rem;
+                    font-size: 3.5rem;
                     color: white;
                 }
                 .overlay {

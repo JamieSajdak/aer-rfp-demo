@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useState } from "react";
-const dayjs = require("dayjs");
 
 const useForm = (submitForm, validateInput) => {
     const [input, setInput] = useState({});
