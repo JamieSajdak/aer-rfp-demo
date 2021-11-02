@@ -30,33 +30,39 @@ const ProjectDetails = ({
         "Amount",
         "Risk"
     ];
+
+    const decisionButtons = (
+        <Aux>
+            <LoadingButton
+                isLoading={isLoading}
+                click={() => handleSubmit("Approved")}
+                color="green"
+                size="button--sm"
+            >
+                Approve
+            </LoadingButton>
+            <LoadingButton
+                isLoading={isLoading}
+                click={() => handleSubmit("Denied")}
+                color="red"
+                size="button--sm"
+            >
+                Deny
+            </LoadingButton>
+        </Aux>
+    );
     return (
         <Aux>
             {selectedProject ? <div className="background" /> : null}
             {selectedProject ? (
                 <div className="selected-project shadow">
-                    <div className="selected-project-header space">
+                    <div className="selected-project-header">
                         <h2>Project Details</h2>
                         {selectedProject?.Status === "Submitted" &&
                         isUserAer ? (
-                            <Aux>
-                                <LoadingButton
-                                    isLoading={isLoading}
-                                    click={() => handleSubmit("Approved")}
-                                    color="green"
-                                    size="button--sm"
-                                >
-                                    Approve
-                                </LoadingButton>
-                                <LoadingButton
-                                    isLoading={isLoading}
-                                    click={() => handleSubmit("Denied")}
-                                    color="red"
-                                    size="button--sm"
-                                >
-                                    Deny
-                                </LoadingButton>
-                            </Aux>
+                            <div className="decisionButtons__desktop decisionButtons">
+                                {decisionButtons}
+                            </div>
                         ) : null}
                         <button
                             aria-label="close popup"
@@ -69,15 +75,6 @@ const ProjectDetails = ({
                     <div className="selected-project-details">
                         {Object.keys(selectedProject)
                             .filter((record) => {
-                                // if (record === "ApprovedDate") {
-                                //     if (
-                                //         dayjs(selectedProject[record]).isBefore(
-                                //             "2000-01-01"
-                                //         )
-                                //     ) {
-                                //         return false;
-                                //     }
-                                // }
                                 return detailsToShow.includes(record);
                             })
                             .map((key) => {
@@ -93,11 +90,27 @@ const ProjectDetails = ({
                                     </div>
                                 );
                             })}
+                        <div className="decisionButtons__mobile decisionButtons">
+                            {decisionButtons}
+                        </div>
                     </div>
                 </div>
             ) : null}
 
             <style jsx>{`
+                .decisionButtons {
+                    display: flex;
+                    margin-left: auto;
+                    align-items: center;
+                }
+                .decisionButtons > * + * {
+                    margin-left: 1rem;
+                }
+                .decisionButtons__desktop {
+                    display: none;
+                }
+                .decisionButtons__mobile {
+                }
                 .close {
                     padding: 0;
                     border: 1px solid #bbb;
@@ -139,6 +152,9 @@ const ProjectDetails = ({
                     display: flex;
                     align-items: center;
                 }
+                .selected-project-header > * + * {
+                    margin-left: 1rem;
+                }
                 .selected-project-header h2 {
                     color: white;
                     margin-right: auto;
@@ -155,6 +171,21 @@ const ProjectDetails = ({
                 }
                 .selected-project-details span {
                     color: var(--cl-primary);
+                }
+
+                @media (min-width: 500px) {
+                    .selected-project-header {
+                    }
+                    .decisionButtons__mobile {
+                        display: none;
+                    }
+                    .decisionButtons {
+                        margin-top: 0;
+                    }
+                    .decisionButtons__desktop {
+                        display: flex;
+                        margin-top: 0;
+                    }
                 }
             `}</style>
         </Aux>

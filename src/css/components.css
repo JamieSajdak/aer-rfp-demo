@@ -64,6 +64,13 @@
     font-size: 0.8rem;
     min-width: 6rem;
 }
+/* @media (min-width: 500px) {
+    .button--sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        min-width: 6rem;
+    }
+} */
 .button--loading {
     min-height: 3rem;
     padding: 0.2rem;
