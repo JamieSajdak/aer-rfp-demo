@@ -12,11 +12,11 @@ export const validateLogin = (input) => {
 export const validateRecordSubmit = (input) => {
     let errors = {};
 
-    if (!input.well_id) {
-        errors.well_id = "- well ID required";
-    }
     if (!/^[A-Z]{2}-[\d]{2}-[\d]{2}$/.test(input.well_id)) {
         errors.well_id = "- enter a valid well ID (AA-00-00)";
+    }
+    if (!input.well_id) {
+        errors.well_id = "- well ID required";
     }
     if (!input.authorization_num || input.authorization_num === "") {
         errors.authorization_num = "- authorization number required";
@@ -27,11 +27,12 @@ export const validateRecordSubmit = (input) => {
     if (!input.industry_type || input.industry_type === "") {
         errors.industry_type = "- industry type required";
     }
-    if (!input.amount) {
-        errors.amount = "- amount required";
-    }
+
     if (input.amount >= 100 || input.amount < 0) {
         errors.amount = "- value between 1-100 required";
+    }
+    if (!input.amount) {
+        errors.amount = "- amount required";
     }
     if (!input.date) {
         errors.date = "- please enter a date";

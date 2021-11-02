@@ -95,7 +95,9 @@ const Review = (props) => {
                     : "FAIL - server error"
             );
             setSelectedProject();
-            fetchRecords();
+            setTimeout(() => {
+                fetchRecords();
+            }, 1000);
         }
     };
 
@@ -116,6 +118,7 @@ const Review = (props) => {
             column === "SubmittedDate" ||
             (column === "ApprovedDate" && record[column])
         ) {
+            console.log(record[column]);
             const date = new dayjs(record[column]);
             if (date.isBefore(dayjs("2000-01-01"))) {
                 return "";
