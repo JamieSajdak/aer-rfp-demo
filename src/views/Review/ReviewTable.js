@@ -56,9 +56,7 @@ const ReviewTable = ({
             isForIndustry: true
         }
     ].filter((column) => {
-        return userContext?.Role === USER_ROLE_AER
-            ? true
-            : column.isForIndustry;
+        return isUserAer ? true : column.isForIndustry;
     });
 
     return (
@@ -170,7 +168,7 @@ const ReviewTable = ({
                 .row--selected {
                     background-color: #eee;
                 }
-                @media (max-width: 500px) {
+                @media (max-width: 1200px) {
                     .twrap {
                         width: 100%;
                         overflow-x: auto;

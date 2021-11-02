@@ -10,6 +10,7 @@ import InputDate from "../components/InputDate";
 import { UserCxt } from "../services/userContext";
 import { postNewRecord } from "../services/queryApi";
 import Spinner from "../components/Spiner";
+import PageTitle from "../components/PageTitle";
 
 const Submit = (props) => {
     const { userContext, formContext } = useContext(UserCxt);
@@ -69,8 +70,14 @@ const Submit = (props) => {
 
     return (
         <Aux>
+            <div>
+                <PageTitle
+                    title="Submit New Record"
+                    image="/images/titleImage2.jpg"
+                />
+            </div>
             <div className="container">
-                <h1>Record Submission</h1>
+                <h2>New Record Submission From</h2>
                 <div className="divider" />
                 <div className="container--inner flow">
                     <form
@@ -191,7 +198,7 @@ const Submit = (props) => {
                     margin-left: auto;
                 }
                 .form {
-                    margin-top: 1rem;
+                    margin-top: 2rem;
                     display: grid;
                     grid-template-columns: repeat(
                         auto-fill,

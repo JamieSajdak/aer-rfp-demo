@@ -3,6 +3,7 @@
 :root {
     /*COLORS*/
     --cl-primary: #0a5688;
+    --cl-primary-dark: #052d47;
     --cl-light-grey: #eee;
     --cl-dark-grey: rgb(145, 145, 145);
     --cl-light-green: #74aa50;

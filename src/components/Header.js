@@ -79,8 +79,10 @@ const Header = (props) => {
                     justify-content: space-between;
                 }
                 .header {
-                    background-color: white;
-                    margin-bottom: 1rem;
+                    z-index: 5;
+                    position: absolute;
+                    width: 100vw;
+                    background-color: rgba(255, 255, 255, 0.9);
                     padding: 1rem 0;
                 }
                 .header-logo {
