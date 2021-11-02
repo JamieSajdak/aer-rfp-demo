@@ -31,26 +31,28 @@ const ProjectDetails = ({
         "Risk"
     ];
 
-    const decisionButtons = (
-        <Aux>
-            <LoadingButton
-                isLoading={isLoading}
-                click={() => handleSubmit("Approved")}
-                color="green"
-                size="button--sm"
-            >
-                Approve
-            </LoadingButton>
-            <LoadingButton
-                isLoading={isLoading}
-                click={() => handleSubmit("Denied")}
-                color="red"
-                size="button--sm"
-            >
-                Deny
-            </LoadingButton>
-        </Aux>
-    );
+    const decisionButtons =
+        selectedProject?.Status === "Submitted" && isUserAer ? (
+            <Aux>
+                <LoadingButton
+                    isLoading={isLoading}
+                    click={() => handleSubmit("Approved")}
+                    color="green"
+                    size="button--sm"
+                >
+                    Approve
+                </LoadingButton>
+                <LoadingButton
+                    isLoading={isLoading}
+                    click={() => handleSubmit("Denied")}
+                    color="red"
+                    size="button--sm"
+                >
+                    Deny
+                </LoadingButton>
+            </Aux>
+        ) : null;
+
     return (
         <Aux>
             {selectedProject ? <div className="background" /> : null}
@@ -58,12 +60,11 @@ const ProjectDetails = ({
                 <div className="selected-project shadow">
                     <div className="selected-project-header">
                         <h2>Project Details</h2>
-                        {selectedProject?.Status === "Submitted" &&
-                        isUserAer ? (
-                            <div className="decisionButtons__desktop decisionButtons">
-                                {decisionButtons}
-                            </div>
-                        ) : null}
+
+                        <div className="decisionButtons__desktop decisionButtons">
+                            {decisionButtons}
+                        </div>
+
                         <button
                             aria-label="close popup"
                             className="close"
