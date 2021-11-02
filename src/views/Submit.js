@@ -149,7 +149,7 @@ const Submit = (props) => {
                         />
                         <InputFile
                             for="file"
-                            label="Supported Documentation"
+                            label="Supporting Documentation"
                             errors={errors}
                             input={input}
                             type="file"
